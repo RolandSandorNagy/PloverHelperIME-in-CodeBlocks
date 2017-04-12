@@ -1,0 +1,44 @@
+# depslib dependency file v1.0
+1492025058 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
+	"Server.h"
+
+1492024476 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.h
+	"defines.h"
+	"includes.h"
+	"View.h"
+	"Controller.h"
+
+1492019013 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\defines.h
+
+1492019135 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\includes.h
+	<iostream>
+	<stdlib.h>
+	<conio.h>
+	<windows.h>
+	<tchar.h>
+	<sstream>
+	<string.h>
+	<string>
+	<malloc.h>
+	<memory.h>
+	<pthread.h>
+	<winsock2.h>
+	<ws2tcpip.h>
+
+1492022859 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
+	"View.h"
+
+1492021132 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
+	"defines.h"
+	"includes.h"
+
+1492023069 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
+	"Server.h"
+	"View.h"
+
+1492025102 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.h
+	"includes.h"
+
+1492025123 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
+	"Controller.h"
+
