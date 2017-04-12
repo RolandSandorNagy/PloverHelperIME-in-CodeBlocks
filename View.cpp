@@ -85,15 +85,35 @@ void View::createWindow()
                             NULL);
 }
 
-void View::show()
+void View::showPopup()
 {
     ShowWindow(hwnd, SW_SHOW);
+    show = true;
+    //UpdateWindow(hwnd);
 }
 
-void View::hide()
+void View::hidePopup()
 {
     ShowWindow(hwnd, SW_HIDE);
+    show = false;
+    //UpdateWindow(hwnd);
 }
+
+bool View::getShow()
+{
+    return show;
+}
+
+void View::movePopup(int x, int y, int width, int height)
+{
+	MoveWindow(hwnd, x, y, width, height, true);
+}
+
+// ----------------------------------------------------- //
+/* ***************************************************** */
+// ----------------------------------------------------- //
+
+
 
 LRESULT CALLBACK ViewNS::WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -102,23 +122,27 @@ LRESULT CALLBACK ViewNS::WindowProcedure(HWND hwnd, UINT message, WPARAM wParam,
         case WM_DESTROY:
             PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
             break;
+
         case WM_CHAR:
             if (wParam == VK_ESCAPE) {
-                //std::cout << "ESC was pressed." << std::endl;
-                PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
-            } else if(wParam == VK_RETURN) {
-                //std::cout << "Enter was pressed." << std::endl;
-                return DefWindowProc (hwnd, message, wParam, lParam);
-            } else {
-                //std::cout << "A key was pressed: " << (char)wParam << std::endl;
-                return DefWindowProc (hwnd, message, wParam, lParam);
+                std::cout << "ESC was pressed on popup window." << std::endl;
+                global::hgView->hidePopup();
+                //PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
             }
             break;
-        case SW_SHOW:
-            std::cout << "Show msg received." << std::endl;
-            return DefWindowProc (hwnd, message, wParam, lParam);
+            //else if(wParam == VK_RETURN) {
+                //std::cout << "Enter was pressed." << std::endl;
+                //return DefWindowProc (hwnd, message, wParam, lParam);
+            //} else {
+                //std::cout << "A key was pressed: " << (char)wParam << std::endl;
+                //return DefWindowProc (hwnd, message, wParam, lParam);
+            //}
+            //break;
+        //case SW_SHOW:
+            //std::cout << "Show msg received." << std::endl;
+            //return DefWindowProc (hwnd, message, wParam, lParam);
         default:                      /* for messages that we don't deal with */
-            std::cout << "msg received: " << message << std::endl;
+            //std::cout << "msg received: " << message << std::endl;
             return DefWindowProc (hwnd, message, wParam, lParam);
     }
 
@@ -128,7 +152,7 @@ LRESULT CALLBACK ViewNS::WindowProcedure(HWND hwnd, UINT message, WPARAM wParam,
 void* ViewNS::wThreadMethod(void* hInst)
 {
     View view((HINSTANCE*)hInst);
-    view.show();
+    view.showPopup();
 
     global::hgView = &view;
 

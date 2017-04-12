@@ -15,13 +15,16 @@ private:
     HINSTANCE *hInstance;    /* This is the handle for our program */
     HWND hwnd;               /* This is the handle for our window */
     WNDCLASSEX wincl;        /* Data structure for the windowclass */
+    bool show;
 
 /* Public methods */
 public:
     View(HINSTANCE*);
     ~View();
-    void show();
-    void hide();
+    void showPopup();
+    void hidePopup();
+    bool getShow();
+    void movePopup(int, int, int, int);
 
 /* Private methods */
 private:

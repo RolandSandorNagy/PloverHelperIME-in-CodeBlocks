@@ -6,11 +6,16 @@ namespace ServerNS
     void* sThreadMethod(void* hInst);
 }
 
+namespace global
+{
+    extern View* hgView;
+}
+
 
 Server::Server(HINSTANCE* data)
 {
     initServer(data);
-    controller = (Controller*)new Controller();
+    controller = (Controller*)new Controller(global::hgView);
 }
 
 Server::~Server()
