@@ -37,11 +37,14 @@
 			<Add library="kernel32" />
 			<Add library="comctl32" />
 		</Linker>
+		<Unit filename="Controller.cpp" />
+		<Unit filename="Controller.h" />
 		<Unit filename="Server.cpp" />
 		<Unit filename="Server.h" />
 		<Unit filename="View.cpp" />
 		<Unit filename="View.h" />
 		<Unit filename="defines.h" />
+		<Unit filename="globals.h" />
 		<Unit filename="includes.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
