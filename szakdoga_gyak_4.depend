@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1492027080 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
+1492039325 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
 	"Server.h"
 
 1492024476 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.h
@@ -25,10 +25,10 @@
 	<winsock2.h>
 	<ws2tcpip.h>
 
-1492034308 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
+1492041487 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
-1492033070 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
+1492041401 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
 	"defines.h"
 	"includes.h"
 
@@ -36,11 +36,11 @@
 	"globals.h"
 	"Server.h"
 
-1492033826 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.h
+1492037816 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.h
 	"includes.h"
 	"View.h"
 
-1492035385 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
+1492041388 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
 	"Controller.h"
 
 1492025246 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\globals.h

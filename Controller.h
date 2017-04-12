@@ -23,7 +23,7 @@ public:  /* methods */
 private: /* methods */
     POINT adjustPopUp();
     POINT getCaretPosition();
-
+    std::wstring s2ws(const std::string&, int *size_needed);
 };
 
 

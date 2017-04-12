@@ -16,6 +16,7 @@ private:
     HWND hwnd;               /* This is the handle for our window */
     WNDCLASSEX wincl;        /* Data structure for the windowclass */
     bool show;
+    int ln;
 
 /* Public methods */
 public:
@@ -25,12 +26,15 @@ public:
     void hidePopup();
     bool getShow();
     void movePopup(int, int, int, int);
+    void drawStringOnPopUp(std::wstring, unsigned int, POINT);
+    void clearPopup(int);
 
 /* Private methods */
 private:
     void initWincl(HINSTANCE*);
     bool register_Class();
     void createWindow();
+    void handleNextLine(HDC);
 
 };
 

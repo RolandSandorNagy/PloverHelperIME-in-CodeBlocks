@@ -151,9 +151,10 @@ bool Server::receiveUntilPeerShutsDown()
     do
     {
         iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-        if (iResult > 0)
+        if (iResult > 0) {
+            recvbuf[iResult] = '\0';
             controller->processMessage(recvbuf, recvbuflen, iResult);
-        else if (iResult < 0) {
+        } else if (iResult < 0) {
             std::cout << "recv failed with error: " << WSAGetLastError() << std::endl;
             CleanUp();
             return false;
