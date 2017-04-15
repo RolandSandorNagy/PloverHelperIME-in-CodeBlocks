@@ -17,6 +17,16 @@ void Controller::processMessage(char* recvbuf, int recvbuflen, unsigned int iRes
     std::cout << "Processing..." << std::endl;
     std::cout << "msg: " << recvbuf << std::endl;
     // Todo...
+
+    int size_needed;
+	std::wstring ws = s2ws(recvbuf, &size_needed);
+    POINT p = adjustPopUp();
+    view->clearPopup(1);
+    view->drawStringOnPopUp(ws, ws.size(), p);
+
+
+
+    /*
     std::cout << "spelling msg:"<< std::endl;
     for(unsigned int i = 0; i < iResult; ++i)
     {
@@ -91,6 +101,7 @@ void Controller::processMessage(char* recvbuf, int recvbuflen, unsigned int iRes
         view->drawStringOnPopUp(intent + wstr, s_needed, p);
         //view->drawStringOnPopUp(ws, size_needed, p);
     }
+    */
 }
 
 std::wstring Controller::s2ws(const std::string& str, int *size_needed)

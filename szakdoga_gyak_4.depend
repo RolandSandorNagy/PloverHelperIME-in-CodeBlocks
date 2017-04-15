@@ -25,14 +25,14 @@
 	<winsock2.h>
 	<ws2tcpip.h>
 
-1492041487 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
+1492236912 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
 1492041401 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
 	"defines.h"
 	"includes.h"
 
-1492025269 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
+1492183940 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
 	"globals.h"
 	"Server.h"
 
@@ -40,7 +40,7 @@
 	"includes.h"
 	"View.h"
 
-1492041388 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
+1492106361 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
 	"Controller.h"
 
 1492025246 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\globals.h

@@ -118,6 +118,7 @@ void View::drawStringOnPopUp(std::wstring ws, unsigned int length, POINT p)
 	SetTextColor(hDC, RGB(0, 0, 0));
 	SetBkColor(hDC, RGB(200, 200, 200));
 
+    std::cout << "WS TO DRAW IS: '" << ws.c_str() << "'" << std::endl;
 	DrawText(hDC, ws.c_str(), ws.length(), &rect, 0);
 	EndPaint(hwnd, &ps);
 	handleNextLine(hDC);
