@@ -7,6 +7,8 @@
 namespace global
 {
     View* hgView;
+
+    bool isRunning = true;
 }
 
 

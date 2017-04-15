@@ -18,7 +18,6 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
     void *windowThreadStatus;
     void *serverThreadStatus;
 
-
     pthread_join(windowThread, &windowThreadStatus);
     pthread_join(serverThread, &serverThreadStatus);
 

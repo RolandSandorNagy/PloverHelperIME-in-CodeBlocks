@@ -7,7 +7,6 @@ namespace ViewNS
     bool on;
     TCHAR szClassName[ ] = _T("CodeBlocksWindowsApp");
 
-
     LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);
     void* wThreadMethod(void*);
 }
@@ -23,6 +22,7 @@ namespace global
 View::View(HINSTANCE *hInst)
 {
     ViewNS::on = true;
+    ln = 0;
 
     hInstance = hInst;
 
@@ -85,15 +85,68 @@ void View::createWindow()
                             NULL);
 }
 
-void View::show()
+void View::showPopup()
 {
     ShowWindow(hwnd, SW_SHOW);
+    show = true;
+    //UpdateWindow(hwnd);
 }
 
-void View::hide()
+void View::hidePopup()
 {
     ShowWindow(hwnd, SW_HIDE);
+    show = false;
+    //UpdateWindow(hwnd);
 }
+
+bool View::getShow()
+{
+    return show;
+}
+
+void View::movePopup(int x, int y, int width, int height)
+{
+	MoveWindow(hwnd, x, y, width, height, true);
+}
+
+void View::drawStringOnPopUp(std::wstring ws, unsigned int length, POINT p)
+{
+	PAINTSTRUCT ps;
+	HDC hDC = GetDC(hwnd);
+	RECT rect = { 5, 5 + ln * 20, 305, 5 + (ln + 1) * 20 };
+
+	SetTextColor(hDC, RGB(0, 0, 0));
+	SetBkColor(hDC, RGB(200, 200, 200));
+
+	DrawText(hDC, ws.c_str(), ws.length(), &rect, 0);
+	EndPaint(hwnd, &ps);
+	handleNextLine(hDC);
+}
+
+void View::handleNextLine(HDC hDC)
+{
+	ln = (ln > 14 ? 0 : ln + 1);
+	if (ln == 0)
+    clearPopup(15);
+}
+
+void View::clearPopup(int l)
+{
+    if(ln + l <= 14)
+        return;
+    HDC hDC = GetDC(hwnd);
+    RECT r = { 0, 0, 300, 300 };
+    FillRect(hDC, &r, (HBRUSH)(LTGRAY_BRUSH));
+    SetROP2(hDC, R2_NOTXORPEN);
+    ln = 0;
+}
+
+
+// ----------------------------------------------------- //
+/* ***************************************************** */
+// ----------------------------------------------------- //
+
+
 
 LRESULT CALLBACK ViewNS::WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -102,23 +155,27 @@ LRESULT CALLBACK ViewNS::WindowProcedure(HWND hwnd, UINT message, WPARAM wParam,
         case WM_DESTROY:
             PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
             break;
+
         case WM_CHAR:
             if (wParam == VK_ESCAPE) {
-                //std::cout << "ESC was pressed." << std::endl;
-                PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
-            } else if(wParam == VK_RETURN) {
-                //std::cout << "Enter was pressed." << std::endl;
-                return DefWindowProc (hwnd, message, wParam, lParam);
-            } else {
-                //std::cout << "A key was pressed: " << (char)wParam << std::endl;
-                return DefWindowProc (hwnd, message, wParam, lParam);
+                std::cout << "ESC was pressed on popup window." << std::endl;
+                global::hgView->hidePopup();
+                //PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
             }
             break;
-        case SW_SHOW:
-            std::cout << "Show msg received." << std::endl;
-            return DefWindowProc (hwnd, message, wParam, lParam);
+            //else if(wParam == VK_RETURN) {
+                //std::cout << "Enter was pressed." << std::endl;
+                //return DefWindowProc (hwnd, message, wParam, lParam);
+            //} else {
+                //std::cout << "A key was pressed: " << (char)wParam << std::endl;
+                //return DefWindowProc (hwnd, message, wParam, lParam);
+            //}
+            //break;
+        //case SW_SHOW:
+            //std::cout << "Show msg received." << std::endl;
+            //return DefWindowProc (hwnd, message, wParam, lParam);
         default:                      /* for messages that we don't deal with */
-            std::cout << "msg received: " << message << std::endl;
+            //std::cout << "msg received: " << message << std::endl;
             return DefWindowProc (hwnd, message, wParam, lParam);
     }
 
@@ -128,7 +185,7 @@ LRESULT CALLBACK ViewNS::WindowProcedure(HWND hwnd, UINT message, WPARAM wParam,
 void* ViewNS::wThreadMethod(void* hInst)
 {
     View view((HINSTANCE*)hInst);
-    view.show();
+    view.showPopup();
 
     global::hgView = &view;
 

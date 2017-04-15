@@ -6,11 +6,18 @@ namespace ServerNS
     void* sThreadMethod(void* hInst);
 }
 
+namespace global
+{
+    extern View* hgView;
+
+    extern bool isRunning;
+}
+
 
 Server::Server(HINSTANCE* data)
 {
     initServer(data);
-    controller = (Controller*)new Controller();
+    controller = (Controller*)new Controller(global::hgView);
 }
 
 Server::~Server()
@@ -32,23 +39,18 @@ void Server::initServer(HINSTANCE* hInst)
 
 void Server::run()
 {
-    initWinSock();
-
-    resolveServerAddressAndPort();
-
-    createSocket();
-
-    setupListenSocket();
-
-    acceptClientSocket();
-
-    closeServerSocket();
-
-    receiveUntilPeerShutsDown();
-
-    shutDownConnection();
-
-    CleanUp();
+    while(global::isRunning)
+    {
+        initWinSock();
+        resolveServerAddressAndPort();
+        createSocket();
+        setupListenSocket();
+        acceptClientSocket();
+        closeServerSocket();
+        receiveUntilPeerShutsDown();
+        shutDownConnection();
+        CleanUp();
+    }
 }
 
 bool Server::initWinSock()
@@ -102,8 +104,7 @@ bool Server::setupListenSocket()
     if (iResult == SOCKET_ERROR) {
         std::cout << "bind failed with error: " << WSAGetLastError() << std::endl;
         freeaddrinfo(result);
-        closesocket(ListenSocket);
-        WSACleanup();
+        CleanUp();
         return false;
     }
 
@@ -112,8 +113,7 @@ bool Server::setupListenSocket()
     iResult = listen(ListenSocket, SOMAXCONN);
     if (iResult == SOCKET_ERROR) {
         std::cout << "listen failed with error: " << WSAGetLastError() << std::endl;
-        closesocket(ListenSocket);
-        WSACleanup();
+        CleanUp();
         return false;
     }
 
@@ -126,10 +126,10 @@ bool Server::acceptClientSocket()
     ClientSocket = accept(ListenSocket, NULL, NULL);
     if (ClientSocket == INVALID_SOCKET) {
         std::cout << "accept failed with error: " << WSAGetLastError() << std::endl;
-        closesocket(ListenSocket);
-        WSACleanup();
+        CleanUp();
         return false;
     }
+    std::cout << "Plover has connected." << std::endl;
     return true;
 }
 
@@ -146,9 +146,10 @@ bool Server::receiveUntilPeerShutsDown()
     do
     {
         iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-        if (iResult > 0)
+        if (iResult > 0) {
+            recvbuf[iResult] = '\0';
             controller->processMessage(recvbuf, recvbuflen, iResult);
-        else if (iResult < 0) {
+        } else if (iResult < 0) {
             std::cout << "recv failed with error: " << WSAGetLastError() << std::endl;
             CleanUp();
             return false;
@@ -164,8 +165,7 @@ void Server::shutDownConnection()
     iResult = shutdown(ClientSocket, SD_SEND);
     if (iResult == SOCKET_ERROR) {
         std::cout << "shutdown failed with error: " << WSAGetLastError() << std::endl;
-        closesocket(ClientSocket);
-        WSACleanup();
+        CleanUp();
         return;
     }
 }
@@ -173,7 +173,7 @@ void Server::shutDownConnection()
 void Server::CleanUp()
 {
     // cleanup
-    closesocket(ClientSocket);
+    closeServerSocket();
     WSACleanup();
 }
 
