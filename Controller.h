@@ -13,7 +13,7 @@ public: /* members */
 
 private: /* members */
     View* view;
-    bool isActive = true;
+    bool isActive;
     FILE file;
 
 public:  /* methods */

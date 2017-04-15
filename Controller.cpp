@@ -1,9 +1,18 @@
 #include "Controller.h"
 
 
+namespace global
+{
+    extern View* hgView;
+
+    extern bool isRunning;
+}
+
+
 
 Controller::Controller(View* v)
 {
+    isActive = global::isRunning;
     view = v;
 }
 
@@ -55,6 +64,7 @@ void Controller::proceedResume()
 void Controller::proceedStop()
 {
     // TODO: We should end this program here
+    global::isRunning = false;
 }
 
 void Controller::proceedShow()

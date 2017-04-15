@@ -9,6 +9,8 @@ namespace ServerNS
 namespace global
 {
     extern View* hgView;
+
+    extern bool isRunning;
 }
 
 
@@ -37,23 +39,18 @@ void Server::initServer(HINSTANCE* hInst)
 
 void Server::run()
 {
-    initWinSock();
-
-    resolveServerAddressAndPort();
-
-    createSocket();
-
-    setupListenSocket();
-
-    acceptClientSocket();
-
-    closeServerSocket();
-
-    receiveUntilPeerShutsDown();
-
-    shutDownConnection();
-
-    CleanUp();
+    while(global::isRunning)
+    {
+        initWinSock();
+        resolveServerAddressAndPort();
+        createSocket();
+        setupListenSocket();
+        acceptClientSocket();
+        closeServerSocket();
+        receiveUntilPeerShutsDown();
+        shutDownConnection();
+        CleanUp();
+    }
 }
 
 bool Server::initWinSock()
@@ -107,8 +104,7 @@ bool Server::setupListenSocket()
     if (iResult == SOCKET_ERROR) {
         std::cout << "bind failed with error: " << WSAGetLastError() << std::endl;
         freeaddrinfo(result);
-        closesocket(ListenSocket);
-        WSACleanup();
+        CleanUp();
         return false;
     }
 
@@ -117,8 +113,7 @@ bool Server::setupListenSocket()
     iResult = listen(ListenSocket, SOMAXCONN);
     if (iResult == SOCKET_ERROR) {
         std::cout << "listen failed with error: " << WSAGetLastError() << std::endl;
-        closesocket(ListenSocket);
-        WSACleanup();
+        CleanUp();
         return false;
     }
 
@@ -131,10 +126,10 @@ bool Server::acceptClientSocket()
     ClientSocket = accept(ListenSocket, NULL, NULL);
     if (ClientSocket == INVALID_SOCKET) {
         std::cout << "accept failed with error: " << WSAGetLastError() << std::endl;
-        closesocket(ListenSocket);
-        WSACleanup();
+        CleanUp();
         return false;
     }
+    std::cout << "Plover has connected." << std::endl;
     return true;
 }
 
@@ -170,8 +165,7 @@ void Server::shutDownConnection()
     iResult = shutdown(ClientSocket, SD_SEND);
     if (iResult == SOCKET_ERROR) {
         std::cout << "shutdown failed with error: " << WSAGetLastError() << std::endl;
-        closesocket(ClientSocket);
-        WSACleanup();
+        CleanUp();
         return;
     }
 }
@@ -179,7 +173,7 @@ void Server::shutDownConnection()
 void Server::CleanUp()
 {
     // cleanup
-    closesocket(ClientSocket);
+    closeServerSocket();
     WSACleanup();
 }
 
