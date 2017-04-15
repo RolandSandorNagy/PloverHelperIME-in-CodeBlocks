@@ -5,7 +5,6 @@
 #include "View.h"
 //#include "Server.h"
 
-
 class Controller
 {
 
@@ -14,6 +13,8 @@ public: /* members */
 
 private: /* members */
     View* view;
+    bool isActive = true;
+    FILE file;
 
 public:  /* methods */
     Controller(View*);
@@ -24,6 +25,15 @@ private: /* methods */
     POINT adjustPopUp();
     POINT getCaretPosition();
     std::wstring s2ws(const std::string&, int *size_needed);
+    void proceedPause();
+    void proceedResume();
+    void proceedStop();
+    void proceedShow();
+    void proceedHide();
+    void proceedUndo();
+    void proceedSave();
+    void proceedDefault(char*);
+
 };
 
 
