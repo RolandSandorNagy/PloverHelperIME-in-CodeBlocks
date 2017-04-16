@@ -4,8 +4,9 @@
 
 #include "defines.h"
 #include "includes.h"
-#include "View.h"
-#include "Controller.h"
+
+class View;
+class Controller;
 
 
 struct thread_data{
@@ -17,31 +18,37 @@ struct thread_data{
 
 class Server
 {
-/* Public members*/
-public:
 
-/* Private members*/
-private:
+public: /* members */
+
+
+private: /* members */
     HINSTANCE* hInstance;
 	WSADATA wsaData;
-	int iResult;
-	char recvbuf[DEFAULT_BUFLEN];
-	int recvbuflen;
+
 	SOCKET ListenSocket;
 	SOCKET ClientSocket;
-	struct addrinfo *result = NULL;
+
+	struct addrinfo *result;
 	struct addrinfo hints;
+
+	int iResult;
+	int recvbuflen;
+	char recvbuf[DEFAULT_BUFLEN];
+
     View *view;
     Controller *controller;
 
-/* Public methods*/
-public:
+
+public: /* methods */
     Server(HINSTANCE*);
+    Server();
     ~Server();
+
     void run();
 
-/* Private methods*/
-private:
+
+private: /* methods */
     void initServer(HINSTANCE*);
     bool initWinSock();
     bool resolveServerAddressAndPort();
@@ -52,7 +59,6 @@ private:
     bool receiveUntilPeerShutsDown();
     void shutDownConnection();
     void CleanUp();
-
 
 };
 

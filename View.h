@@ -7,34 +7,38 @@
 
 class View
 {
-/* Public members*/
-public:
 
-/* Private members */
-private:
-    HINSTANCE *hInstance;    /* This is the handle for our program */
-    HWND hwnd;               /* This is the handle for our window */
-    WNDCLASSEX wincl;        /* Data structure for the windowclass */
+public: /* members */
+
+
+private: /* members */
+    HINSTANCE *hInstance;
+    HWND hwnd;
+    WNDCLASSEX wincl;
     bool show;
     int ln;
 
-/* Public methods */
-public:
+
+public: /* methods */
     View(HINSTANCE*);
+    View();
     ~View();
     void showPopup();
     void hidePopup();
     bool getShow();
     void movePopup(int, int, int, int);
-    void drawStringOnPopUp(std::wstring, unsigned int, POINT);
+    void drawStringOnPopUp(std::wstring, unsigned int);
     void clearPopup(int);
+    void closeView();
+    void adjustPopUp();
+    void displayMessage(std::wstring);
 
-/* Private methods */
-private:
+private: /* methods */
     void initWincl(HINSTANCE*);
     bool register_Class();
     void createWindow();
     void handleNextLine(HDC);
+    POINT getCaretPosition();
 
 };
 

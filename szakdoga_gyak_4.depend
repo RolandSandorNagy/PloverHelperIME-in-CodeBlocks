@@ -1,16 +1,13 @@
 # depslib dependency file v1.0
-1492286747 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
-	"Server.h"
-
-1492285407 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.h
-	"defines.h"
-	"includes.h"
-	"View.h"
+1492326100 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
 	"Controller.h"
+	"Server.h"
+	"View.h"
 
-1492019013 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\defines.h
+1492326035 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.h
+	"includes.h"
 
-1492019135 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\includes.h
+1492312534 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\includes.h
 	<iostream>
 	<stdlib.h>
 	<conio.h>
@@ -25,24 +22,28 @@
 	<winsock2.h>
 	<ws2tcpip.h>
 
-1492279755 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
-	"View.h"
-
-1492041401 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
+1492325421 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
 	"defines.h"
 	"includes.h"
 
-1492183940 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
+1492324814 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\defines.h
+
+1492326191 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
 	"globals.h"
 	"Server.h"
 
-1492285505 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.h
+1492326184 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\globals.h
+	"View.h"
+
+1492326071 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.h
+	"defines.h"
 	"includes.h"
+
+1492325522 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
-1492285524 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
+1492326646 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
+	"Server.h"
+	"View.h"
 	"Controller.h"
-
-1492285332 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\globals.h
-	"View.h"
 

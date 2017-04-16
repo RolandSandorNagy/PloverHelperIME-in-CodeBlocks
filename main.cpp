@@ -8,6 +8,13 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
                     int nCmdShow)
 {
 
+    // TODO: Here should be checked if there is an
+    // instance of this program already running.
+    // If so, this instance should be terminated.
+    //
+    // ...
+    //
+
     pthread_t windowThread;
     pthread_t serverThread;
 

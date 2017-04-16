@@ -2,8 +2,10 @@
 #define CONTROLLER_H_INCLUDED
 
 #include "includes.h"
-#include "View.h"
-//#include "Server.h"
+
+class View;
+class Server;
+
 
 class Controller
 {
@@ -13,16 +15,20 @@ public: /* members */
 
 private: /* members */
     View* view;
-    bool isActive;
+    Server* server;
     FILE file;
 
+    bool isActive;
+    std::wstring lastInput;
+
 public:  /* methods */
-    Controller(View*);
+    Controller(View*, Server*);
+    Controller();
     ~Controller();
+
     void processMessage(char*, int, unsigned int);
 
 private: /* methods */
-    POINT adjustPopUp();
     POINT getCaretPosition();
     std::wstring s2ws(const std::string&, int *size_needed);
     void proceedPause();
@@ -32,7 +38,10 @@ private: /* methods */
     void proceedHide();
     void proceedUndo();
     void proceedSave();
-    void proceedDefault(char*);
+    bool commandReceived(char*);
+    void messageReceived(char*, int , unsigned int);
+    void processCommand(std::string);
+
 
 };
 

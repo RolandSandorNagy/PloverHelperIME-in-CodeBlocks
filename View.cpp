@@ -11,10 +11,11 @@ namespace ViewNS
     void* wThreadMethod(void*);
 }
 
-
 namespace global
 {
     extern View* hgView;
+
+    extern bool isRunning;
 }
 
 
@@ -34,35 +35,28 @@ View::View(HINSTANCE *hInst)
     createWindow();
 }
 
-View::~View()
-{
+View::View() {}
 
-}
+View::~View() {}
 
 void View::initWincl(HINSTANCE *hInst)
 {
-    /* The Window structure */
     wincl.hInstance = *hInst;
     wincl.lpszClassName = ViewNS::szClassName;
-    wincl.lpfnWndProc = ViewNS::WindowProcedure;      /* This function is called by windows */
-    wincl.style = CS_DBLCLKS;                 /* Catch double-clicks */
+    wincl.lpfnWndProc = ViewNS::WindowProcedure;
+    wincl.style = CS_DBLCLKS;
     wincl.cbSize = sizeof (WNDCLASSEX);
-
-    /* Use default icon and mouse-pointer */
     wincl.hIcon = LoadIcon (NULL, IDI_APPLICATION);
     wincl.hIconSm = LoadIcon (NULL, IDI_APPLICATION);
     wincl.hCursor = LoadCursor (NULL, IDC_ARROW);
-    wincl.lpszMenuName = NULL;                 /* No menu */
-    wincl.cbClsExtra = 0;                      /* No extra bytes after the window class */
-    wincl.cbWndExtra = 0;                      /* structure or the window instance */
-
-    /* Use Windows's default colour as the background of the window */
+    wincl.lpszMenuName = NULL;
+    wincl.cbClsExtra = 0;
+    wincl.cbWndExtra = 0;
     wincl.hbrBackground = (HBRUSH) COLOR_BACKGROUND;
 }
 
 bool View::register_Class()
 {
-    /* Register the window class, and if it fails quit the program */
     if (!RegisterClassEx (&wincl))
         return false;
     return true;
@@ -70,7 +64,6 @@ bool View::register_Class()
 
 void View::createWindow()
 {
-    /* The class is registered, let's create the program*/
     hwnd = CreateWindowEx ( WS_EX_TOPMOST | WS_EX_TOOLWINDOW,
                             ViewNS::szClassName,
                             _T("Code::Blocks Template Windows App"),
@@ -89,14 +82,12 @@ void View::showPopup()
 {
     ShowWindow(hwnd, SW_SHOW);
     show = true;
-    //UpdateWindow(hwnd);
 }
 
 void View::hidePopup()
 {
     ShowWindow(hwnd, SW_HIDE);
     show = false;
-    //UpdateWindow(hwnd);
 }
 
 bool View::getShow()
@@ -109,7 +100,7 @@ void View::movePopup(int x, int y, int width, int height)
 	MoveWindow(hwnd, x, y, width, height, true);
 }
 
-void View::drawStringOnPopUp(std::wstring ws, unsigned int length, POINT p)
+void View::drawStringOnPopUp(std::wstring ws, unsigned int length)
 {
 	PAINTSTRUCT ps;
 	HDC hDC = GetDC(hwnd);
@@ -141,6 +132,59 @@ void View::clearPopup(int l)
     ln = 0;
 }
 
+void View::closeView()
+{
+    std::cerr<< "View is closing." << std::endl;
+    SendMessage(hwnd, WM_DESTROY, 0, 0);
+}
+
+void View::adjustPopUp()
+{
+	POINT p = getCaretPosition();
+	if (p.y < 35)
+	{
+		hidePopup();
+		return;
+	}
+	movePopup(p.x - 150, p.y + 25, 300, 300);
+    showPopup();
+
+	return;
+}
+
+POINT View::getCaretPosition()
+{
+    POINT *point = new POINT();
+    point->x = 0;
+    point->y = 0;
+
+	HWND Wnd = NULL;
+	HWND Result = NULL;
+	DWORD TId, PId;
+
+    Result = GetFocus();
+    Wnd = GetForegroundWindow();
+	if (Result || !Wnd)
+        return *point;
+
+    TId = GetWindowThreadProcessId(Wnd, &PId);
+    if (   !AttachThreadInput(GetCurrentThreadId(), TId, TRUE)
+        || GetCaretPos(point) == 0)
+        return *point;
+
+    Result = GetFocus();
+    ClientToScreen(Result, point);
+    AttachThreadInput(GetCurrentThreadId(), TId, FALSE);
+	return *point;
+}
+
+void View::displayMessage(std::wstring ws)
+{
+    // TODO: needs to be modified
+    adjustPopUp();
+    clearPopup(1);      // Here argument is the number of lines to be displayed
+    drawStringOnPopUp(ws, ws.size());
+}
 
 // ----------------------------------------------------- //
 /* ***************************************************** */
@@ -150,33 +194,18 @@ void View::clearPopup(int l)
 
 LRESULT CALLBACK ViewNS::WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message)                  /* handle the messages */
+    switch (message)
     {
         case WM_DESTROY:
-            PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
+            PostQuitMessage (0);
             break;
-
         case WM_CHAR:
             if (wParam == VK_ESCAPE) {
-                std::cout << "ESC was pressed on popup window." << std::endl;
+                std::cerr << "ESC was pressed on popup window." << std::endl;
                 global::hgView->hidePopup();
-                //PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
             }
             break;
-            //else if(wParam == VK_RETURN) {
-                //std::cout << "Enter was pressed." << std::endl;
-                //return DefWindowProc (hwnd, message, wParam, lParam);
-            //} else {
-                //std::cout << "A key was pressed: " << (char)wParam << std::endl;
-                //return DefWindowProc (hwnd, message, wParam, lParam);
-            //}
-            //break;
-        //case SW_SHOW:
-            //std::cout << "Show msg received." << std::endl;
-            //return DefWindowProc (hwnd, message, wParam, lParam);
-        default:                      /* for messages that we don't deal with */
-            //std::cout << "msg received: " << message << std::endl;
-            return DefWindowProc (hwnd, message, wParam, lParam);
+        default: return DefWindowProc (hwnd, message, wParam, lParam);
     }
 
     return 0;
@@ -189,18 +218,13 @@ void* ViewNS::wThreadMethod(void* hInst)
 
     global::hgView = &view;
 
-
     MSG messages;
-    /* Run the message loop. It will run until GetMessage() returns 0 */
-    while (GetMessage (&messages, NULL, 0, 0))
+    while (GetMessage (&messages, NULL, 0, 0) && global::isRunning)
     {
-        /* Translate virtual-key messages into character messages */
         TranslateMessage(&messages);
-        /* Send message to WindowProcedure */
         DispatchMessage(&messages);
     }
 
-    /* The program return-value is 0 - The value that PostQuitMessage() gave */
     return (void*)messages.wParam;
 }
 

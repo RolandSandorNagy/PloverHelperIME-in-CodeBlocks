@@ -1,4 +1,6 @@
 #include "Controller.h"
+#include "Server.h"
+#include "View.h"
 
 
 namespace global
@@ -10,31 +12,52 @@ namespace global
 
 
 
-Controller::Controller(View* v)
+Controller::Controller(View* v, Server *s)
 {
     isActive = global::isRunning;
     view = v;
+    server = s;
 }
 
-Controller::~Controller()
-{
+Controller::Controller() {}
 
-}
+Controller::~Controller() {}
 
 void Controller::processMessage(char* recvbuf, int recvbuflen, unsigned int iResult)
 {
-    // Todo...
-    std::string str(recvbuf);
-
-    if(!isActive && str != "RESUME")
+    if(commandReceived(recvbuf))
         return;
 
-    std::cout << "Processing..." << std::endl;
-    std::cout << "msg: " << recvbuf << std::endl;
+    messageReceived(recvbuf, recvbuflen, iResult);
+}
 
-    if(str == "PAUSE")
+bool Controller::commandReceived(char* recvbuf)
+{
+    std::string str(recvbuf);
+    if(str.substr(0,5) == "CMD::")
+    {
+        std::cerr << "processing: " << str.substr(5, str.size());
+        processCommand(str.substr(5, str.size()));
+        return true;
+    }
+    return false;
+}
+
+void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iResult)
+{
+    int size_needed;
+    std::wstring ws = s2ws(recvbuf, &size_needed);
+
+    view->displayMessage(ws);
+}
+
+void Controller::processCommand(std::string str)
+{
+    if(!isActive && str != "RESUME")
+        return;
+    else if(str == "PAUSE")
         proceedPause();
-    if(str == "RESUME")
+    else if(str == "RESUME")
         proceedResume();
     else if(str == "STOP")
         proceedStop();
@@ -46,25 +69,22 @@ void Controller::processMessage(char* recvbuf, int recvbuflen, unsigned int iRes
         proceedUndo();
     else if(str == "SAVE")
         proceedSave();
-    else proceedDefault(recvbuf);
 }
 
 void Controller::proceedPause()
 {
-    // TODO: set isActive flag to False
     isActive = false;
 }
 
 void Controller::proceedResume()
 {
-    // TODO: set isActive flag to True
     isActive = true;
 }
 
 void Controller::proceedStop()
 {
-    // TODO: We should end this program here
     global::isRunning = false;
+    view->closeView();
 }
 
 void Controller::proceedShow()
@@ -74,11 +94,12 @@ void Controller::proceedShow()
     //          even thought it has (0,0) coordinates;
     //          Or it should be just another flag for
     //          visibility.
+    view->showPopup();
 }
 
 void Controller::proceedHide()
 {
-    // TODO: Same consideration needed but in reverse.
+    view->hidePopup();
 }
 
 void Controller::proceedUndo()
@@ -91,62 +112,12 @@ void Controller::proceedSave()
     // TODO: We want to be able to save the last input into a file
 }
 
-void Controller::proceedDefault(char* recvbuf)
-{
-    // TODO: this code should be replaced
-    int size_needed;
-    std::wstring ws = s2ws(recvbuf, &size_needed);
-    POINT p = adjustPopUp();
-    view->clearPopup(1);
-    view->drawStringOnPopUp(ws, ws.size(), p);
-}
-
 std::wstring Controller::s2ws(const std::string& str, int *size_needed)
 {
-    //int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
     *size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
     std::wstring wstrTo( *size_needed, 0 );
     MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], *size_needed);
     return wstrTo;
 }
 
-POINT Controller::adjustPopUp()
-{
-	POINT p = getCaretPosition();
-	if (p.y < 35)
-	{
-		view->hidePopup();
-		return p;
-	}
-	view->movePopup(p.x - 150, p.y + 25, 300, 300);
-    view->showPopup();
-
-	return p;
-}
-
-POINT Controller::getCaretPosition()
-{
-    POINT *point = new POINT();
-    point->x = 0;
-    point->y = 0;
-
-	HWND Wnd = NULL;
-	HWND Result = NULL;
-	DWORD TId, PId;
-
-    Result = GetFocus();
-    Wnd = GetForegroundWindow();
-	if (Result || !Wnd)
-        return *point;
-
-    TId = GetWindowThreadProcessId(Wnd, &PId);
-    if (   !AttachThreadInput(GetCurrentThreadId(), TId, TRUE)
-        || GetCaretPos(point) == 0)
-        return *point;
-
-    Result = GetFocus();
-    ClientToScreen(Result, point);
-    AttachThreadInput(GetCurrentThreadId(), TId, FALSE);
-	return *point;
-}
 

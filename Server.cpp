@@ -1,4 +1,6 @@
 #include "Server.h"
+#include "View.h"
+#include "Controller.h"
 
 
 namespace ServerNS
@@ -17,13 +19,13 @@ namespace global
 Server::Server(HINSTANCE* data)
 {
     initServer(data);
-    controller = (Controller*)new Controller(global::hgView);
+    controller = (Controller*)new Controller(global::hgView, this);
+    result = NULL;
 }
 
-Server::~Server()
-{
+Server::Server() {}
 
-}
+Server::~Server() {}
 
 void Server::initServer(HINSTANCE* hInst)
 {
@@ -39,26 +41,40 @@ void Server::initServer(HINSTANCE* hInst)
 
 void Server::run()
 {
-    while(global::isRunning)
-    {
-        initWinSock();
-        resolveServerAddressAndPort();
-        createSocket();
-        setupListenSocket();
-        acceptClientSocket();
+    // Initialize Winsock
+    if(!global::isRunning || !initWinSock())
+        global::isRunning = false;
+    // Resolve the server address and port
+    if(!global::isRunning || !resolveServerAddressAndPort())
+        global::isRunning = false;
+    // Create a SOCKET for connecting to server
+    if(!global::isRunning || !createSocket())
+        global::isRunning = false;
+    // Setup the TCP listening socket
+    if(!global::isRunning || !setupListenSocket())
+        global::isRunning = false;
+    // Accept a client socket
+    if(!global::isRunning || !acceptClientSocket())
+        global::isRunning = false;
+    // No longer need server socket
+    if(global::isRunning)
         closeServerSocket();
-        receiveUntilPeerShutsDown();
+    // Receive until the peer shuts down the connection
+    if(!global::isRunning || !receiveUntilPeerShutsDown())
+        global::isRunning = false;
+    // shutdown the connection since we're done
+    if(global::isRunning)
         shutDownConnection();
+    // cleanup
+    if(global::isRunning)
         CleanUp();
-    }
 }
 
 bool Server::initWinSock()
 {
-    // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (iResult != 0) {
-        std::cout << "getaddrinfo failed with error: " << iResult << std::endl;
+        std::cerr << "getaddrinfo failed with error: " << iResult << std::endl;
         WSACleanup();
         return false;
     }
@@ -74,10 +90,9 @@ bool Server::initWinSock()
 
 bool Server::resolveServerAddressAndPort()
 {
-    // Resolve the server address and port
     iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
     if (iResult != 0) {
-        std::cout << "getaddrinfo failed with error: " << iResult << std::endl;
+        std::cerr << "getaddrinfo failed with error: " << iResult << std::endl;
         WSACleanup();
         return false;
     }
@@ -86,10 +101,9 @@ bool Server::resolveServerAddressAndPort()
 
 bool Server::createSocket()
 {
-    // Create a SOCKET for connecting to server
     ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
     if (ListenSocket == INVALID_SOCKET) {
-        std::cout << "socket failed with error: " << WSAGetLastError() << std::endl;
+        std::cerr << "socket failed with error: " << WSAGetLastError() << std::endl;
         freeaddrinfo(result);
         WSACleanup();
         return false;
@@ -99,10 +113,9 @@ bool Server::createSocket()
 
 bool Server::setupListenSocket()
 {
-    // Setup the TCP listening socket
     iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
     if (iResult == SOCKET_ERROR) {
-        std::cout << "bind failed with error: " << WSAGetLastError() << std::endl;
+        std::cerr << "bind failed with error: " << WSAGetLastError() << std::endl;
         freeaddrinfo(result);
         CleanUp();
         return false;
@@ -112,7 +125,7 @@ bool Server::setupListenSocket()
 
     iResult = listen(ListenSocket, SOMAXCONN);
     if (iResult == SOCKET_ERROR) {
-        std::cout << "listen failed with error: " << WSAGetLastError() << std::endl;
+        std::cerr << "listen failed with error: " << WSAGetLastError() << std::endl;
         CleanUp();
         return false;
     }
@@ -122,27 +135,24 @@ bool Server::setupListenSocket()
 
 bool Server::acceptClientSocket()
 {
-    // Accept a client socket
     ClientSocket = accept(ListenSocket, NULL, NULL);
     if (ClientSocket == INVALID_SOCKET) {
-        std::cout << "accept failed with error: " << WSAGetLastError() << std::endl;
+        std::cerr << "accept failed with error: " << WSAGetLastError() << std::endl;
         CleanUp();
         return false;
     }
-    std::cout << "Plover has connected." << std::endl;
+    std::cerr << "Plover has connected." << std::endl;
     return true;
 }
 
 void Server::closeServerSocket()
 {
-    // No longer need server socket
     closesocket(ListenSocket);
 }
 
 
 bool Server::receiveUntilPeerShutsDown()
 {
-    // Receive until the peer shuts down the connection
     do
     {
         iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
@@ -150,21 +160,20 @@ bool Server::receiveUntilPeerShutsDown()
             recvbuf[iResult] = '\0';
             controller->processMessage(recvbuf, recvbuflen, iResult);
         } else if (iResult < 0) {
-            std::cout << "recv failed with error: " << WSAGetLastError() << std::endl;
+            std::cerr << "recv failed with error: " << WSAGetLastError() << std::endl;
             CleanUp();
             return false;
         }
-    } while (iResult > 0);
+    } while (iResult > 0 && global::isRunning);
 
     return true;
 }
 
 void Server::shutDownConnection()
 {
-    // shutdown the connection since we're done
     iResult = shutdown(ClientSocket, SD_SEND);
     if (iResult == SOCKET_ERROR) {
-        std::cout << "shutdown failed with error: " << WSAGetLastError() << std::endl;
+        std::cerr << "shutdown failed with error: " << WSAGetLastError() << std::endl;
         CleanUp();
         return;
     }
@@ -172,7 +181,6 @@ void Server::shutDownConnection()
 
 void Server::CleanUp()
 {
-    // cleanup
     closeServerSocket();
     WSACleanup();
 }
@@ -186,7 +194,7 @@ void Server::CleanUp()
 void* ServerNS::sThreadMethod(void* hInst)
 {
     Server server((HINSTANCE*)hInst);
-	while (true) server.run();
+	while(global::isRunning) server.run();
 
     return (void*)0;
 }
