@@ -28,8 +28,8 @@ void Controller::processMessage(char* recvbuf, int recvbuflen, unsigned int iRes
     std::cout << "recvbuf: " << recvbuf << std::endl;
     if(commandReceived(recvbuf))
         return;
-
-    messageReceived(recvbuf, recvbuflen, iResult);
+    if(isActive)
+        messageReceived(recvbuf, recvbuflen, iResult);
 }
 
 bool Controller::commandReceived(char* recvbuf)
@@ -82,11 +82,13 @@ void Controller::processCommand(std::string str)
 void Controller::proceedPause()
 {
     isActive = false;
+    proceedHide();
 }
 
 void Controller::proceedResume()
 {
     isActive = true;
+    proceedShow();
 }
 
 void Controller::proceedStop()
