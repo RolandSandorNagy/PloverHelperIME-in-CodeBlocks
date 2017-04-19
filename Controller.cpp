@@ -1,4 +1,5 @@
 #include "Controller.h"
+#include "Suggestion.h"
 #include "Server.h"
 #include "View.h"
 
@@ -11,13 +12,13 @@ namespace global
 }
 
 
-
 Controller::Controller(View* v, Server *s)
 {
     isActive = global::isRunning;
     view = v;
     server = s;
     inputHistory.clear();
+    suggestions.clear();
 }
 
 Controller::Controller() {}
@@ -50,14 +51,16 @@ void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iRe
     int size_needed;
     std::string s(recvbuf);
     std::wstring ws = s2ws(s, &size_needed);
-    //std::wstring ws = s2ws(recvbuf, &size_needed);
 
     std::cout << "recvbuf: " << recvbuf << std::endl;
     std::cout << "s: " << s << std::endl;
 
     inputHistory.push_back(ws);
-    //view->displayMessage(ws);
-    view->displayMessage(inputHistory);
+
+    collectSuggestions(ws);
+    sortSuggestions();
+
+    view->displaySuggestions(suggestions);
 }
 
 void Controller::processCommand(std::string str)
@@ -78,8 +81,6 @@ void Controller::processCommand(std::string str)
         proceedUndo();
     else if(str == "SAVE")
         proceedSave();
-
-    // std::cout << "it didnt return!" << std::endl;
 }
 
 void Controller::proceedPause()
@@ -102,11 +103,6 @@ void Controller::proceedStop()
 
 void Controller::proceedShow()
 {
-    // TODO:    consideration needed about what to do here
-    //          could be forcing the popup to be seen
-    //          even thought it has (0,0) coordinates;
-    //          Or it should be just another flag for
-    //          visibility.
     view->showPopup();
 }
 
@@ -117,16 +113,32 @@ void Controller::proceedHide()
 
 void Controller::proceedUndo()
 {
-    // TODO: Not clear yet what to do here.
     if(inputHistory.size() == 0)
         return;
+    handleSuggestions();
     inputHistory.pop_back();
-    view->displayMessage(inputHistory);
+    collectSuggestions(inputHistory[inputHistory.size() - 1]);
+    sortSuggestions();
+    view->displaySuggestions(suggestions);
+}
+
+void Controller::handleSuggestions()
+{
+    std::wstring ws = inputHistory[inputHistory.size() - 1];
+    for(int i = 0; i < (int)suggestions.size(); ++i)
+    {
+        if(suggestions[i].getWText() == ws)
+        {
+            int mult = suggestions[i].getMultiplicity();
+            mult--;
+            suggestions[i].setMultiplicity(mult);
+            return;
+        }
+    }
 }
 
 void Controller::proceedSave()
 {
-    // TODO: We want to be able to save the last input into a file
     if(inputHistory.size() == 0)
         return;
     file.open("lastinput.txt");
@@ -140,6 +152,41 @@ std::wstring Controller::s2ws(const std::string& str, int *size_needed)
     std::wstring wstrTo( *size_needed, 0 );
     MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], *size_needed);
     return wstrTo;
+}
+
+void Controller::collectSuggestions(std::wstring ws)
+{
+    suggestions.clear();
+    for(int i = 0; i < (int)inputHistory.size() - 1; ++i)
+    {
+        if(inputHistory[i] == ws)
+        {
+            if(suggestionsHasMember(inputHistory[i + 1]))
+                continue;
+            Suggestion s(1, inputHistory[i + 1]);
+            suggestions.push_back(s);
+        }
+    }
+}
+
+bool Controller::suggestionsHasMember(std::wstring ws)
+{
+    for(int i = 0; i < (int)suggestions.size(); ++i)
+    {
+        if(suggestions[i].getWText() == ws)
+        {
+            int mult = suggestions[i].getMultiplicity();
+            mult++;
+            suggestions[i].setMultiplicity(mult);
+            return true;
+        }
+    }
+    return false;
+}
+
+void Controller::sortSuggestions()
+{
+    std::sort(suggestions.begin(), suggestions.end(), less_than_key());
 }
 
 

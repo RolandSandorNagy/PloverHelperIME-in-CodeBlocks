@@ -3,6 +3,7 @@
 
 #include "defines.h"
 #include "includes.h"
+#include "Suggestion.h"
 
 
 class View
@@ -31,8 +32,7 @@ public: /* methods */
     void clearPopup(int);
     void closeView();
     void adjustPopUp();
-    void displayMessage(std::wstring);
-    void displayMessage(std::vector<std::wstring>);
+    void displaySuggestions(std::vector<Suggestion>);
 
 private: /* methods */
     void initWincl(HINSTANCE*);

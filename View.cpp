@@ -1,7 +1,6 @@
 #include "View.h"
 
 
-
 namespace ViewNS
 {
     bool on;
@@ -179,23 +178,19 @@ POINT View::getCaretPosition()
 	return *point;
 }
 
-void View::displayMessage(std::wstring ws)
+void View::displaySuggestions(std::vector<Suggestion> suggestions)
 {
-    // TODO: needs to be modified
-    adjustPopUp();
-    clearPopup(1);      // Here argument is the number of lines to be displayed
-    drawStringOnPopUp(ws, ws.size());
-}
-
-void View::displayMessage(std::vector<std::wstring> inputHistory)
-{
-    // TODO: needs to be modified
+    if(suggestions.size() == 0)
+    {
+        hidePopup();
+        return;
+    }
     adjustPopUp();
 
     clearPopup(15);
-    for(int i = inputHistory.size() - 1; i >= 0 && inputHistory.size() - i < 15; --i)
+    for(int i = suggestions.size() - 1; i >= 0 && suggestions.size() - i < 15; --i)
     {
-        drawStringOnPopUp(inputHistory[i], inputHistory[i].size());
+        drawStringOnPopUp(suggestions[i].getWText(), suggestions[i].getWText().size());
     }
 
 }

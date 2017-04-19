@@ -1,13 +1,14 @@
 # depslib dependency file v1.0
-1492628356 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
+1492640487 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
 	"Controller.h"
+	"Suggestion.h"
 	"Server.h"
 	"View.h"
 
-1492627723 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.h
+1492640499 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.h
 	"includes.h"
 
-1492627742 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\includes.h
+1492640000 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\includes.h
 	<iostream>
 	<stdlib.h>
 	<conio.h>
@@ -24,29 +25,37 @@
 	<vector>
 	<iostream>
 	<fstream>
+	<algorithm>
 
-1492625842 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
+1492640413 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
 	"defines.h"
 	"includes.h"
+	"Suggestion.h"
 
 1492324814 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\defines.h
 
-1492326191 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
+1492640283 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
 	"globals.h"
 	"Server.h"
 
-1492326184 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\globals.h
+1492640370 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\globals.h
 	"View.h"
 
 1492326071 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.h
 	"defines.h"
 	"includes.h"
 
-1492626908 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
+1492640536 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
-1492579452 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
+1492640320 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
 	"Server.h"
 	"View.h"
 	"Controller.h"
+
+1492633281 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\suggestion.cpp
+	"Suggestion.h"
+
+1492640948 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\suggestion.h
+	"includes.h"
 

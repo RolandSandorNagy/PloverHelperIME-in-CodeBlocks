@@ -5,6 +5,7 @@
 
 class View;
 class Server;
+class Suggestion;
 
 
 class Controller
@@ -20,6 +21,7 @@ private: /* members */
     bool isActive;
     std::wstring lastInput;
     std::vector<std::wstring> inputHistory;
+    std::vector<Suggestion> suggestions;
 
 public:  /* methods */
     Controller(View*, Server*);
@@ -41,7 +43,10 @@ private: /* methods */
     bool commandReceived(char*);
     void messageReceived(char*, int , unsigned int);
     void processCommand(std::string);
-
+    void collectSuggestions(std::wstring);
+    bool suggestionsHasMember(std::wstring ws);
+    void handleSuggestions();
+    void sortSuggestions();
 
 };
 

@@ -41,37 +41,22 @@ void Server::initServer(HINSTANCE* hInst)
 
 void Server::run()
 {
-    // Initialize Winsock
     if(!global::isRunning || !initWinSock())
         return;
-        //global::isRunning = false;
-    // Resolve the server address and port
     if(!global::isRunning || !resolveServerAddressAndPort())
         return;
-        //global::isRunning = false;
-    // Create a SOCKET for connecting to server
     if(!global::isRunning || !createSocket())
         return;
-        //global::isRunning = false;
-    // Setup the TCP listening socket
     if(!global::isRunning || !setupListenSocket())
         return;
-        //global::isRunning = false;
-    // Accept a client socket
     if(!global::isRunning || !acceptClientSocket())
         return;
-        //global::isRunning = false;
-    // No longer need server socket
     if(global::isRunning)
         closeServerSocket();
-    // Receive until the peer shuts down the connection
     if(!global::isRunning || !receiveUntilPeerShutsDown())
         return;
-        //global::isRunning = false;
-    // shutdown the connection since we're done
     if(global::isRunning)
         shutDownConnection();
-    // cleanup
     if(global::isRunning)
         CleanUp();
 }

@@ -25,4 +25,6 @@
 #include <iostream>
 #include <fstream>
 
+#include <algorithm>
+
 #endif // INCLUDES_H_INCLUDED
