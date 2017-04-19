@@ -32,7 +32,7 @@ public:  /* methods */
 
 private: /* methods */
     POINT getCaretPosition();
-    std::wstring s2ws(const std::string&, int *size_needed);
+    //std::wstring s2ws(const std::string&, int *size_needed);
     void proceedPause();
     void proceedResume();
     void proceedStop();

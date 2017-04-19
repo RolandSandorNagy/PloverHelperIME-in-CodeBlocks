@@ -28,7 +28,6 @@ public: /* methods */
     void hidePopup();
     bool getShow();
     void movePopup(int, int, int, int);
-    void drawStringOnPopUp(std::wstring, unsigned int);
     void clearPopup(int);
     void closeView();
     void adjustPopUp();
@@ -40,6 +39,9 @@ private: /* methods */
     void createWindow();
     void handleNextLine(HDC);
     POINT getCaretPosition();
+    void drawStringOnPopUp(std::wstring, unsigned int, int);
+    void displayBestTenSuggestion(std::vector<Suggestion>);
+
 
 };
 

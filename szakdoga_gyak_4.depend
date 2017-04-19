@@ -1,22 +1,22 @@
 # depslib dependency file v1.0
-1492640487 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
+1492642328 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
 	"Controller.h"
 	"Suggestion.h"
 	"Server.h"
 	"View.h"
 
-1492640499 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.h
+1492642218 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.h
 	"includes.h"
 
-1492640000 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\includes.h
+1492641831 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\includes.h
 	<iostream>
 	<stdlib.h>
 	<conio.h>
 	<windows.h>
 	<tchar.h>
-	<sstream>
 	<string.h>
 	<string>
+	<sstream>
 	<malloc.h>
 	<memory.h>
 	<pthread.h>
@@ -27,7 +27,7 @@
 	<fstream>
 	<algorithm>
 
-1492640413 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
+1492641496 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
 	"defines.h"
 	"includes.h"
 	"Suggestion.h"
@@ -38,14 +38,14 @@
 	"globals.h"
 	"Server.h"
 
-1492640370 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\globals.h
+1492642339 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\globals.h
 	"View.h"
 
 1492326071 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.h
 	"defines.h"
 	"includes.h"
 
-1492640536 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
+1492642155 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
 1492640320 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
@@ -53,7 +53,7 @@
 	"View.h"
 	"Controller.h"
 
-1492633281 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\suggestion.cpp
+1492640741 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\suggestion.cpp
 	"Suggestion.h"
 
 1492640948 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\suggestion.h

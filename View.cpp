@@ -15,8 +15,10 @@ namespace global
     extern View* hgView;
 
     extern bool isRunning;
-}
 
+    extern std::wstring s2ws(const std::string& str, int* size_needed);
+
+}
 
 
 View::View(HINSTANCE *hInst)
@@ -99,16 +101,24 @@ void View::movePopup(int x, int y, int width, int height)
 	MoveWindow(hwnd, x, y, width, height, true);
 }
 
-void View::drawStringOnPopUp(std::wstring ws, unsigned int length)
+void View::drawStringOnPopUp(std::wstring ws, unsigned int length, int mult)
 {
-    std::cout << "ITT VAGYOK" << std::endl;// << "ws: " << ws.c_str() << std::endl;
 	PAINTSTRUCT ps;
 	HDC hDC = GetDC(hwnd);
-	RECT rect = { 5, 5 + ln * 20, 305, 5 + (ln + 1) * 20 };
+
 	SetTextColor(hDC, RGB(0, 0, 0));
 	SetBkColor(hDC, RGB(200, 200, 200));
 
+	RECT rect = { 5, 5 + ln * 20, 305, 5 + (ln + 1) * 20 };
 	DrawText(hDC, ws.c_str(), ws.length(), &rect, 0);
+
+    int size_needed;
+    std::ostringstream ss;
+    ss << mult;
+    std::string s = ss.str();
+    std::wstring wsmult = global::s2ws(s, &size_needed);
+    rect = { 250, 5 + ln * 20, 305, 5 + (ln + 1) * 20 };
+    DrawText(hDC, wsmult.c_str(), wsmult.length(), &rect, 0);
 
 	EndPaint(hwnd, &ps);
 	handleNextLine(hDC);
@@ -134,7 +144,6 @@ void View::clearPopup(int l)
 
 void View::closeView()
 {
-    std::cerr<< "View is closing." << std::endl;
     SendMessage(hwnd, WM_DESTROY, 0, 0);
 }
 
@@ -185,15 +194,20 @@ void View::displaySuggestions(std::vector<Suggestion> suggestions)
         hidePopup();
         return;
     }
+
     adjustPopUp();
-
     clearPopup(15);
-    for(int i = suggestions.size() - 1; i >= 0 && suggestions.size() - i < 15; --i)
-    {
-        drawStringOnPopUp(suggestions[i].getWText(), suggestions[i].getWText().size());
-    }
-
+    displayBestTenSuggestion(suggestions);
 }
+
+void View::displayBestTenSuggestion(std::vector<Suggestion> suggestions)
+{
+    for(int i = suggestions.size() - 1; i >= 0 && suggestions.size() - i < 10; --i)
+    {
+        drawStringOnPopUp(suggestions[i].getWText(), suggestions[i].getWText().size(), suggestions[i].getMultiplicity());
+    }
+}
+
 
 // ----------------------------------------------------- //
 /* ***************************************************** */
@@ -210,7 +224,6 @@ LRESULT CALLBACK ViewNS::WindowProcedure(HWND hwnd, UINT message, WPARAM wParam,
             break;
         case WM_CHAR:
             if (wParam == VK_ESCAPE) {
-                std::cerr << "ESC was pressed on popup window." << std::endl;
                 global::hgView->hidePopup();
             }
             break;

@@ -9,6 +9,16 @@ namespace global
     extern View* hgView;
 
     extern bool isRunning;
+
+    std::wstring s2ws(const std::string& str, int* size_needed)
+    {
+        *size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+        std::wstring wstrTo( *size_needed, 0 );
+        MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], *size_needed);
+        return wstrTo;
+    }
+
+
 }
 
 
@@ -27,7 +37,6 @@ Controller::~Controller() {}
 
 void Controller::processMessage(char* recvbuf, int recvbuflen, unsigned int iResult)
 {
-    std::cout << "recvbuf: " << recvbuf << std::endl;
     if(commandReceived(recvbuf))
         return;
     if(isActive)
@@ -39,7 +48,6 @@ bool Controller::commandReceived(char* recvbuf)
     std::string str(recvbuf);
     if(str.substr(0,5) == "CMD::")
     {
-        std::cerr << "processing: " << str.substr(5, str.size()) << std::endl;
         processCommand(str.substr(5, str.size()));
         return true;
     }
@@ -50,10 +58,7 @@ void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iRe
 {
     int size_needed;
     std::string s(recvbuf);
-    std::wstring ws = s2ws(s, &size_needed);
-
-    std::cout << "recvbuf: " << recvbuf << std::endl;
-    std::cout << "s: " << s << std::endl;
+    std::wstring ws = global::s2ws(s, &size_needed);
 
     inputHistory.push_back(ws);
 
@@ -146,6 +151,7 @@ void Controller::proceedSave()
     file.close();
 }
 
+/*
 std::wstring Controller::s2ws(const std::string& str, int *size_needed)
 {
     *size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
@@ -153,6 +159,7 @@ std::wstring Controller::s2ws(const std::string& str, int *size_needed)
     MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], *size_needed);
     return wstrTo;
 }
+*/
 
 void Controller::collectSuggestions(std::wstring ws)
 {
