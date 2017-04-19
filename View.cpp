@@ -16,8 +16,7 @@ namespace global
 
     extern bool isRunning;
 
-    extern std::wstring s2ws(const std::string& str, int* size_needed);
-
+    extern std::wstring s2ws(const std::string&, int*);
 }
 
 
@@ -25,6 +24,9 @@ View::View(HINSTANCE *hInst)
 {
     ViewNS::on = true;
     ln = 0;
+    popupWidth  = 300;
+    popupHeight = 300;
+
 
     hInstance = hInst;
 
@@ -71,8 +73,8 @@ void View::createWindow()
                             WS_POPUP,
                             0,
                             0,
-                            300,
-                            300,
+                            popupWidth,
+                            popupHeight,
                             NULL,
                             NULL,
                             *hInstance,
@@ -147,7 +149,7 @@ void View::closeView()
     SendMessage(hwnd, WM_DESTROY, 0, 0);
 }
 
-void View::adjustPopUp()
+void View::adjustPopUp(int enrties)
 {
 	POINT p = getCaretPosition();
 	if (p.y < 35)
@@ -155,7 +157,8 @@ void View::adjustPopUp()
 		hidePopup();
 		return;
 	}
-	movePopup(p.x - 150, p.y + 25, 300, 300);
+	popupHeight = enrties * 20 + 5;
+	movePopup(p.x - 150, p.y + 25, popupWidth, popupHeight);
     showPopup();
 
 	return;
@@ -195,7 +198,7 @@ void View::displaySuggestions(std::vector<Suggestion> suggestions)
         return;
     }
 
-    adjustPopUp();
+    adjustPopUp(suggestions.size());
     clearPopup(15);
     displayBestTenSuggestion(suggestions);
 }

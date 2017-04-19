@@ -18,6 +18,8 @@ private: /* members */
     WNDCLASSEX wincl;
     bool show;
     int ln;
+    int popupWidth;
+    int popupHeight;
 
 
 public: /* methods */
@@ -30,7 +32,7 @@ public: /* methods */
     void movePopup(int, int, int, int);
     void clearPopup(int);
     void closeView();
-    void adjustPopUp();
+    void adjustPopUp(int);
     void displaySuggestions(std::vector<Suggestion>);
 
 private: /* methods */
