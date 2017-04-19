@@ -25,6 +25,7 @@ Controller::~Controller() {}
 
 void Controller::processMessage(char* recvbuf, int recvbuflen, unsigned int iResult)
 {
+    std::cout << "recvbuf: " << recvbuf << std::endl;
     if(commandReceived(recvbuf))
         return;
 
@@ -47,9 +48,11 @@ void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iRe
 {
     int size_needed;
     std::string s(recvbuf);
-    std::wstring ws = s2ws(recvbuf, &size_needed);
+    std::wstring ws = s2ws(s, &size_needed);
+    //std::wstring ws = s2ws(recvbuf, &size_needed);
 
-    std::cout << s << std::endl;
+    std::cout << "recvbuf: " << recvbuf << std::endl;
+    std::cout << "s: " << s << std::endl;
 
     view->displayMessage(ws);
 }

@@ -102,14 +102,15 @@ void View::movePopup(int x, int y, int width, int height)
 
 void View::drawStringOnPopUp(std::wstring ws, unsigned int length)
 {
+    std::cout << "ITT VAGYOK" << std::endl;// << "ws: " << ws.c_str() << std::endl;
 	PAINTSTRUCT ps;
 	HDC hDC = GetDC(hwnd);
 	RECT rect = { 5, 5 + ln * 20, 305, 5 + (ln + 1) * 20 };
-
 	SetTextColor(hDC, RGB(0, 0, 0));
 	SetBkColor(hDC, RGB(200, 200, 200));
 
 	DrawText(hDC, ws.c_str(), ws.length(), &rect, 0);
+
 	EndPaint(hwnd, &ps);
 	handleNextLine(hDC);
 }
