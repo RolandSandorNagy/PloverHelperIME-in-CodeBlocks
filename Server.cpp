@@ -43,25 +43,31 @@ void Server::run()
 {
     // Initialize Winsock
     if(!global::isRunning || !initWinSock())
-        global::isRunning = false;
+        return;
+        //global::isRunning = false;
     // Resolve the server address and port
     if(!global::isRunning || !resolveServerAddressAndPort())
-        global::isRunning = false;
+        return;
+        //global::isRunning = false;
     // Create a SOCKET for connecting to server
     if(!global::isRunning || !createSocket())
-        global::isRunning = false;
+        return;
+        //global::isRunning = false;
     // Setup the TCP listening socket
     if(!global::isRunning || !setupListenSocket())
-        global::isRunning = false;
+        return;
+        //global::isRunning = false;
     // Accept a client socket
     if(!global::isRunning || !acceptClientSocket())
-        global::isRunning = false;
+        return;
+        //global::isRunning = false;
     // No longer need server socket
     if(global::isRunning)
         closeServerSocket();
     // Receive until the peer shuts down the connection
     if(!global::isRunning || !receiveUntilPeerShutsDown())
-        global::isRunning = false;
+        return;
+        //global::isRunning = false;
     // shutdown the connection since we're done
     if(global::isRunning)
         shutDownConnection();

@@ -28,7 +28,7 @@ void Controller::processMessage(char* recvbuf, int recvbuflen, unsigned int iRes
     if(commandReceived(recvbuf))
         return;
 
-    messageReceived(recvbuf, recvbuflen, iResult);
+    //messageReceived(recvbuf, recvbuflen, iResult);
 }
 
 bool Controller::commandReceived(char* recvbuf)
@@ -36,7 +36,7 @@ bool Controller::commandReceived(char* recvbuf)
     std::string str(recvbuf);
     if(str.substr(0,5) == "CMD::")
     {
-        std::cerr << "processing: " << str.substr(5, str.size());
+        // std::cerr << "processing: " << str.substr(5, str.size()) << std::endl;
         processCommand(str.substr(5, str.size()));
         return true;
     }
@@ -69,6 +69,8 @@ void Controller::processCommand(std::string str)
         proceedUndo();
     else if(str == "SAVE")
         proceedSave();
+
+    // std::cout << "it didnt return!" << std::endl;
 }
 
 void Controller::proceedPause()
