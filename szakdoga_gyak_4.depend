@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1492573374 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
+1492586123 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
 	"Controller.h"
 	"Server.h"
 	"View.h"
@@ -39,7 +39,7 @@
 	"defines.h"
 	"includes.h"
 
-1492325522 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
+1492586470 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
 1492579452 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp

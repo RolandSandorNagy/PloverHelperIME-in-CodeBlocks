@@ -28,7 +28,7 @@ void Controller::processMessage(char* recvbuf, int recvbuflen, unsigned int iRes
     if(commandReceived(recvbuf))
         return;
 
-    //messageReceived(recvbuf, recvbuflen, iResult);
+    messageReceived(recvbuf, recvbuflen, iResult);
 }
 
 bool Controller::commandReceived(char* recvbuf)
@@ -36,7 +36,7 @@ bool Controller::commandReceived(char* recvbuf)
     std::string str(recvbuf);
     if(str.substr(0,5) == "CMD::")
     {
-        // std::cerr << "processing: " << str.substr(5, str.size()) << std::endl;
+        std::cerr << "processing: " << str.substr(5, str.size()) << std::endl;
         processCommand(str.substr(5, str.size()));
         return true;
     }
@@ -46,7 +46,10 @@ bool Controller::commandReceived(char* recvbuf)
 void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iResult)
 {
     int size_needed;
+    std::string s(recvbuf);
     std::wstring ws = s2ws(recvbuf, &size_needed);
+
+    std::cout << s << std::endl;
 
     view->displayMessage(ws);
 }
