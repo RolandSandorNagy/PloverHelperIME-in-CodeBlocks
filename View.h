@@ -32,6 +32,7 @@ public: /* methods */
     void closeView();
     void adjustPopUp();
     void displayMessage(std::wstring);
+    void displayMessage(std::vector<std::wstring>);
 
 private: /* methods */
     void initWincl(HINSTANCE*);

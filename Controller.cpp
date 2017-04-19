@@ -17,6 +17,7 @@ Controller::Controller(View* v, Server *s)
     isActive = global::isRunning;
     view = v;
     server = s;
+    inputHistory.clear();
 }
 
 Controller::Controller() {}
@@ -54,7 +55,9 @@ void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iRe
     std::cout << "recvbuf: " << recvbuf << std::endl;
     std::cout << "s: " << s << std::endl;
 
-    view->displayMessage(ws);
+    inputHistory.push_back(ws);
+    //view->displayMessage(ws);
+    view->displayMessage(inputHistory);
 }
 
 void Controller::processCommand(std::string str)
@@ -115,11 +118,20 @@ void Controller::proceedHide()
 void Controller::proceedUndo()
 {
     // TODO: Not clear yet what to do here.
+    if(inputHistory.size() == 0)
+        return;
+    inputHistory.pop_back();
+    view->displayMessage(inputHistory);
 }
 
 void Controller::proceedSave()
 {
     // TODO: We want to be able to save the last input into a file
+    if(inputHistory.size() == 0)
+        return;
+    file.open("lastinput.txt");
+    file << inputHistory[inputHistory.size() - 1].c_str() << std::endl;
+    file.close();
 }
 
 std::wstring Controller::s2ws(const std::string& str, int *size_needed)

@@ -187,6 +187,19 @@ void View::displayMessage(std::wstring ws)
     drawStringOnPopUp(ws, ws.size());
 }
 
+void View::displayMessage(std::vector<std::wstring> inputHistory)
+{
+    // TODO: needs to be modified
+    adjustPopUp();
+
+    clearPopup(15);
+    for(int i = inputHistory.size() - 1; i >= 0 && inputHistory.size() - i < 15; --i)
+    {
+        drawStringOnPopUp(inputHistory[i], inputHistory[i].size());
+    }
+
+}
+
 // ----------------------------------------------------- //
 /* ***************************************************** */
 // ----------------------------------------------------- //

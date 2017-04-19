@@ -16,10 +16,10 @@ public: /* members */
 private: /* members */
     View* view;
     Server* server;
-    FILE file;
-
+    std::ofstream file;
     bool isActive;
     std::wstring lastInput;
+    std::vector<std::wstring> inputHistory;
 
 public:  /* methods */
     Controller(View*, Server*);

@@ -21,6 +21,8 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
-
+#include <vector>
+#include <iostream>
+#include <fstream>
 
 #endif // INCLUDES_H_INCLUDED
