@@ -41,6 +41,8 @@
 		<Unit filename="Controller.h" />
 		<Unit filename="Server.cpp" />
 		<Unit filename="Server.h" />
+		<Unit filename="Suggestion.cpp" />
+		<Unit filename="Suggestion.h" />
 		<Unit filename="View.cpp" />
 		<Unit filename="View.h" />
 		<Unit filename="defines.h" />

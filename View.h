@@ -20,6 +20,7 @@ private: /* members */
     int ln;
     int popupWidth;
     int popupHeight;
+    COLORREF bgColor;
 
 
 public: /* methods */

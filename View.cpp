@@ -27,6 +27,7 @@ View::View(HINSTANCE *hInst)
     popupWidth  = 300;
     popupHeight = 300;
 
+    bgColor = RGB(240, 240, 240);
 
     hInstance = hInst;
 
@@ -55,7 +56,7 @@ void View::initWincl(HINSTANCE *hInst)
     wincl.lpszMenuName = NULL;
     wincl.cbClsExtra = 0;
     wincl.cbWndExtra = 0;
-    wincl.hbrBackground = (HBRUSH) COLOR_BACKGROUND;
+    wincl.hbrBackground = CreateSolidBrush(bgColor);//(HBRUSH) COLOR_BACKGROUND;
 }
 
 bool View::register_Class()
@@ -109,7 +110,7 @@ void View::drawStringOnPopUp(std::wstring ws, unsigned int length, int mult)
 	HDC hDC = GetDC(hwnd);
 
 	SetTextColor(hDC, RGB(0, 0, 0));
-	SetBkColor(hDC, RGB(200, 200, 200));
+	SetBkColor(hDC, RGB(240, 240, 240));
 
 	RECT rect = { 5, 5 + ln * 20, 305, 5 + (ln + 1) * 20 };
 	DrawText(hDC, ws.c_str(), ws.length(), &rect, 0);
@@ -119,7 +120,7 @@ void View::drawStringOnPopUp(std::wstring ws, unsigned int length, int mult)
     ss << mult;
     std::string s = ss.str();
     std::wstring wsmult = global::s2ws(s, &size_needed);
-    rect = { 250, 5 + ln * 20, 305, 5 + (ln + 1) * 20 };
+    rect = { 280, 5 + ln * 20, 305, 5 + (ln + 1) * 20 };
     DrawText(hDC, wsmult.c_str(), wsmult.length(), &rect, 0);
 
 	EndPaint(hwnd, &ps);
@@ -139,7 +140,7 @@ void View::clearPopup(int l)
         return;
     HDC hDC = GetDC(hwnd);
     RECT r = { 0, 0, 300, 300 };
-    FillRect(hDC, &r, (HBRUSH)(LTGRAY_BRUSH));
+    FillRect(hDC, &r, CreateSolidBrush(bgColor));//(HBRUSH)(LTGRAY_BRUSH));
     SetROP2(hDC, R2_NOTXORPEN);
     ln = 0;
 }
