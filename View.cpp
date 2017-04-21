@@ -110,10 +110,10 @@ void View::drawStringOnPopUp(std::wstring ws, unsigned int length, int mult)
 	PAINTSTRUCT ps;
 	HDC hDC = GetDC(hwnd);
 
-	SetTextColor(hDC, RGB(0, 0, 0));
+	SetTextColor(hDC, RGB(183, 183, 18));
 	SetBkColor(hDC, RGB(240, 240, 240));
 
-	RECT rect = { 5, 5 + ln * 20, 305, 5 + (ln + 1) * 20 };
+	RECT rect = { 5, ln * 20, popupWidth + 5, 5 + (ln + 1) * 20 };
 	DrawText(hDC, ws.c_str(), ws.length(), &rect, 0);
 
     int size_needed;
@@ -121,7 +121,7 @@ void View::drawStringOnPopUp(std::wstring ws, unsigned int length, int mult)
     ss << mult;
     std::string s = ss.str();
     std::wstring wsmult = global::s2ws(s, &size_needed);
-    rect = { 280, 5 + ln * 20, 305, 5 + (ln + 1) * 20 };
+    rect = { popupWidth - 15, ln * 20, popupWidth + 5, 5 + (ln + 1) * 20 };
     DrawText(hDC, wsmult.c_str(), wsmult.length(), &rect, 0);
 
 	EndPaint(hwnd, &ps);
@@ -151,16 +151,18 @@ void View::closeView()
     SendMessage(hwnd, WM_DESTROY, 0, 0);
 }
 
-void View::adjustPopUp(int enrties)
+void View::adjustPopUp(int enrties, int maxOffset)
 {
+    Sleep(10);
 	POINT p = getCaretPosition();
 	if (p.y < 35)
 	{
 		hidePopup();
 		return;
 	}
-	popupHeight = enrties * 20 + 5;
-	movePopup(p.x, p.y + 25, popupWidth, popupHeight);
+    popupWidth = maxOffset * 10 + 5 + 50;
+	popupHeight = enrties * 20;
+	movePopup(p.x, p.y, popupWidth, popupHeight);
     showPopup();
 
 	return;
@@ -200,17 +202,31 @@ void View::displaySuggestions(std::vector<Suggestion> suggestions)
         return;
     }
 
-    adjustPopUp(suggestions.size());
+    adjustPopUp(suggestions.size(),
+                getMaxOffset(suggestions));
     clearPopup(15);
     displayBestTenSuggestion(suggestions);
     hideTimeout();
 }
 
+int View::getMaxOffset(std::vector<Suggestion> suggestions)
+{
+    int max = 0;
+    for(int i = suggestions.size() - 1; i >= 0 && suggestions.size() - i < 10; --i)
+    {
+        if(suggestions[i].getWText().size() > max)
+        {
+            max = suggestions[i].getWText().size();
+        }
+    }
+    return max;
+}
+
 void View::hideTimeout()
 {
     pthread_t toThread;
-    pthread_create(&toThread, NULL, ViewNS::toThreadMethod, (void*)maxThreadId);
     maxThreadId++;
+    pthread_create(&toThread, NULL, ViewNS::toThreadMethod, (void*)maxThreadId);
     timeoutThread = &toThread;
 }
 

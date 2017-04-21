@@ -36,8 +36,9 @@ public: /* methods */
     void movePopup(int, int, int, int);
     void clearPopup(int);
     void closeView();
-    void adjustPopUp(int);
+    void adjustPopUp(int, int);
     void displaySuggestions(std::vector<Suggestion>);
+    int getMaxOffset(std::vector<Suggestion>);
     int getPopupTimeout();
     void setPopupTimeout(int);
 

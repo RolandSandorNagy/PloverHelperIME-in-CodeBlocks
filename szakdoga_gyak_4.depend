@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1492806335 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
+1492814000 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
 	"Controller.h"
 	"Suggestion.h"
 	"Server.h"
@@ -27,17 +27,18 @@
 	<fstream>
 	<algorithm>
 
-1492787155 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
+1492813979 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
 	"defines.h"
 	"includes.h"
 	"Suggestion.h"
 
 1492324814 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\defines.h
 
-1492783405 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
+1492808102 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
 	"globals.h"
 	"Config.h"
 	"Server.h"
+	<fstream>
 
 1492642339 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\globals.h
 	"View.h"
@@ -47,7 +48,7 @@
 	"includes.h"
 	"Config.h"
 
-1492806129 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
+1492814335 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
 1492781799 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
