@@ -1,4 +1,5 @@
 #include "globals.h"
+#include "Config.h"
 #include "Server.h"
 
 
@@ -8,12 +9,19 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
                     int nCmdShow)
 {
 
+    Config config;
+    if(config.file_not_found)
+        return -1;
+
     pthread_t windowThread;
     pthread_t serverThread;
 
     pthread_create(&windowThread, NULL, ViewNS::wThreadMethod, (void*)&hThisInstance);
+
     while(!global::hgView){}
-    pthread_create(&serverThread, NULL, ServerNS::sThreadMethod, (void*)&hThisInstance);
+    global::hgView->setPopupTimeout(config.getPopupTimeout());
+
+    pthread_create(&serverThread, NULL, ServerNS::sThreadMethod, (void*)&config);
 
     void *windowThreadStatus;
     void *serverThreadStatus;

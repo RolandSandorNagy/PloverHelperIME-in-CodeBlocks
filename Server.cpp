@@ -16,9 +16,9 @@ namespace global
 }
 
 
-Server::Server(HINSTANCE* data)
+Server::Server(Config* config)
 {
-    initServer(data);
+    initServer(config);
     controller = (Controller*)new Controller(global::hgView, this);
     result = NULL;
 }
@@ -27,9 +27,9 @@ Server::Server() {}
 
 Server::~Server() {}
 
-void Server::initServer(HINSTANCE* hInst)
+void Server::initServer(Config* conf)
 {
-    hInstance = hInst;
+    config = conf;
 
     recvbuflen = DEFAULT_BUFLEN;
 
@@ -81,7 +81,8 @@ bool Server::initWinSock()
 
 bool Server::resolveServerAddressAndPort()
 {
-    iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
+    iResult = getaddrinfo(config->getHost().c_str(), config->getPort().c_str(), &hints, &result);
+    std::cout << config->getHost() << std::endl;
     if (iResult != 0) {
         std::cerr << "getaddrinfo failed with error: " << iResult << std::endl;
         WSACleanup();
@@ -182,9 +183,9 @@ void Server::CleanUp()
 // ----------------------------------------------------- //
 
 
-void* ServerNS::sThreadMethod(void* hInst)
+void* ServerNS::sThreadMethod(void* config)
 {
-    Server server((HINSTANCE*)hInst);
+    Server server((Config*)config);
 	while(global::isRunning) server.run();
 
     return (void*)0;

@@ -8,6 +8,7 @@ namespace ViewNS
 
     LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);
     void* wThreadMethod(void*);
+    void* toThreadMethod(void* view);
 }
 
 namespace global
@@ -202,6 +203,15 @@ void View::displaySuggestions(std::vector<Suggestion> suggestions)
     adjustPopUp(suggestions.size());
     clearPopup(15);
     displayBestTenSuggestion(suggestions);
+    hideTimeout();
+}
+
+void View::hideTimeout()
+{
+    pthread_t toThread;
+    pthread_create(&toThread, NULL, ViewNS::toThreadMethod, (void*)maxThreadId);
+    maxThreadId++;
+    timeoutThread = &toThread;
 }
 
 void View::displayBestTenSuggestion(std::vector<Suggestion> suggestions)
@@ -210,6 +220,16 @@ void View::displayBestTenSuggestion(std::vector<Suggestion> suggestions)
     {
         drawStringOnPopUp(suggestions[i].getWText(), suggestions[i].getWText().size(), suggestions[i].getMultiplicity());
     }
+}
+
+int View::getPopupTimeout()
+{
+    return popupTimeout;
+}
+
+void View::setPopupTimeout(int val)
+{
+    popupTimeout = val;
 }
 
 
@@ -254,3 +274,15 @@ void* ViewNS::wThreadMethod(void* hInst)
     return (void*)messages.wParam;
 }
 
+void* ViewNS::toThreadMethod(void* id)
+{
+    int to = ((View*)global::hgView)->getPopupTimeout();
+    Sleep(to * 1000);
+    std::cout << "maxThreadId: " << ((View*)global::hgView)->maxThreadId << std::endl;
+    std::cout << "id: " << (INT)id << std::endl;
+    if(((View*)global::hgView)->maxThreadId != (INT)id)
+        return (void*) 1;
+    ((View*)global::hgView)->hidePopup();
+    ((View*)global::hgView)->maxThreadId = 0;
+    return (void*) 0;
+}

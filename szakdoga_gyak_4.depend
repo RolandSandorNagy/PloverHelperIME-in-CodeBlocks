@@ -27,28 +27,30 @@
 	<fstream>
 	<algorithm>
 
-1492644226 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
+1492787155 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
 	"defines.h"
 	"includes.h"
 	"Suggestion.h"
 
 1492324814 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\defines.h
 
-1492640283 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
+1492783405 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
 	"globals.h"
+	"Config.h"
 	"Server.h"
 
 1492642339 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\globals.h
 	"View.h"
 
-1492326071 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.h
+1492780659 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.h
 	"defines.h"
 	"includes.h"
+	"Config.h"
 
-1492644338 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
+1492786992 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
-1492640320 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
+1492781799 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
 	"Server.h"
 	"View.h"
 	"Controller.h"
@@ -57,5 +59,11 @@
 	"Suggestion.h"
 
 1492640948 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\suggestion.h
+	"includes.h"
+
+1492783518 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\config.cpp
+	"Config.h"
+
+1492783511 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\config.h
 	"includes.h"
 

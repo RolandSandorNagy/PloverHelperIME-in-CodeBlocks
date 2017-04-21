@@ -4,9 +4,11 @@
 
 #include "defines.h"
 #include "includes.h"
+#include "Config.h"
 
 class View;
 class Controller;
+//class Config;
 
 
 struct thread_data{
@@ -23,8 +25,11 @@ public: /* members */
 
 
 private: /* members */
-    HINSTANCE* hInstance;
+    Config* config;
 	WSADATA wsaData;
+
+	std::string host;
+	int port;
 
 	SOCKET ListenSocket;
 	SOCKET ClientSocket;
@@ -41,7 +46,7 @@ private: /* members */
 
 
 public: /* methods */
-    Server(HINSTANCE*);
+    Server(Config*);
     Server();
     ~Server();
 
@@ -49,7 +54,7 @@ public: /* methods */
 
 
 private: /* methods */
-    void initServer(HINSTANCE*);
+    void initServer(Config*);
     bool initWinSock();
     bool resolveServerAddressAndPort();
     bool createSocket();

@@ -10,6 +10,7 @@ class View
 {
 
 public: /* members */
+    int maxThreadId = 0;
 
 
 private: /* members */
@@ -21,6 +22,8 @@ private: /* members */
     int popupWidth;
     int popupHeight;
     COLORREF bgColor;
+    int popupTimeout;
+    pthread_t *timeoutThread = NULL;
 
 
 public: /* methods */
@@ -35,6 +38,9 @@ public: /* methods */
     void closeView();
     void adjustPopUp(int);
     void displaySuggestions(std::vector<Suggestion>);
+    int getPopupTimeout();
+    void setPopupTimeout(int);
+
 
 private: /* methods */
     void initWincl(HINSTANCE*);
@@ -44,6 +50,7 @@ private: /* methods */
     POINT getCaretPosition();
     void drawStringOnPopUp(std::wstring, unsigned int, int);
     void displayBestTenSuggestion(std::vector<Suggestion>);
+    void hideTimeout();
 
 
 };
