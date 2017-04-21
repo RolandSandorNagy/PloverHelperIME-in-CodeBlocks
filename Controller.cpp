@@ -118,11 +118,13 @@ void Controller::proceedHide()
 
 void Controller::proceedUndo()
 {
-    if(inputHistory.size() <= 1)
+    if(inputHistory.size() == 1)
     {
         inputHistory.pop_back();
         return;
     }
+    else if(inputHistory.size() == 0)
+        return;
     handleSuggestions();
     inputHistory.pop_back();
     collectSuggestions(inputHistory[inputHistory.size() - 1]);

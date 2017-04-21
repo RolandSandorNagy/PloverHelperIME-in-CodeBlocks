@@ -160,7 +160,7 @@ void View::adjustPopUp(int enrties)
 		return;
 	}
 	popupHeight = enrties * 20 + 5;
-	movePopup(p.x - 150, p.y + 25, popupWidth, popupHeight);
+	movePopup(p.x, p.y + 25, popupWidth, popupHeight);
     showPopup();
 
 	return;
