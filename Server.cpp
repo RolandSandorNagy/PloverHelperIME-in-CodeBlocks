@@ -89,7 +89,6 @@ bool Server::initWinSock()
 bool Server::resolveServerAddressAndPort()
 {
     iResult = getaddrinfo(config->getHost().c_str(), config->getPort().c_str(), &hints, &result);
-    std::cout << config->getHost() << std::endl;
     if (iResult != 0) {
         std::cerr << ADDRESS_RESOLVE_FAILED << iResult << std::endl;
         WSACleanup();
@@ -140,7 +139,6 @@ bool Server::acceptClientSocket()
         CleanUp();
         return false;
     }
-    std::cerr << "Plover has connected." << std::endl;
     return true;
 }
 

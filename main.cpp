@@ -7,6 +7,7 @@
 #define DONE 0
 #define LOCK_FILE_EXIST -1
 #define CONFIG_FILE_NOT_FOUND -2
+#define DELETE_FILE_FAILED "Error deleting file"
 
 
 bool lockFileExist();
@@ -67,7 +68,5 @@ void makeLockFile()
 void deleteLockFile()
 {
     if(remove(LOCK_FILE_LOCATION) != 0)
-        perror("Error deleting file");
-    else
-        puts("File successfully deleted");
+        std::cerr << DELETE_FILE_FAILED << std::endl;
 }

@@ -40,7 +40,7 @@
 	"Server.h"
 	<fstream>
 
-1492642339 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\globals.h
+1492825161 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\globals.h
 	"View.h"
 
 1492823287 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.h
@@ -48,7 +48,7 @@
 	"includes.h"
 	"Config.h"
 
-1492822031 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
+1492825112 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
 1492823617 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
