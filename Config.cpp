@@ -1,19 +1,20 @@
 #include "Config.h"
 
 
-#define CONFIG_FILE_LOCATION "plover\\plover\\"
-#define CONFIG_FILE_NAME "plover.cfg"
+#define CONFIG_FILE_LOCATION "\\plover\\plover"
+#define CONFIG_FILE_NAME "\\plover.cfg"
 #define IME_CONFIG_SECTION "[Ime Configuration]"
 #define POPUP_TIMEOUT "popup_timeout = "
 #define SUGGEST_BY "suggest_by = "
 #define HOST "host = "
 #define PORT "port = "
 #define SECTION_START_CHAR '['
+#define DEFAULT_START_PATH "c:"
 
 
 Config::Config()
 {
-    full_path = "c:\\";
+    full_path = DEFAULT_START_PATH;
     SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, szPath);
     std::string path(szPath);
     if(strlen(szPath) == 0)
