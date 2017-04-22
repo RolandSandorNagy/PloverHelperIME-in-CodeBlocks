@@ -1,7 +1,7 @@
 #include "Config.h"
 
 
-#define CONFIG_FILE_LOCATION "\\plover\\plover\\"
+#define CONFIG_FILE_LOCATION "plover\\plover\\"
 #define CONFIG_FILE_NAME "plover.cfg"
 #define IME_CONFIG_SECTION "[Ime Configuration]"
 #define POPUP_TIMEOUT "popup_timeout = "
@@ -13,14 +13,13 @@
 
 Config::Config()
 {
-    full_path = "c:";
+    full_path = "c:\\";
     SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, szPath);
     std::string path(szPath);
     if(strlen(szPath) == 0)
         full_path += CONFIG_FILE_LOCATION;
     else
         full_path = path + CONFIG_FILE_LOCATION;
-    std::cout << "full_path: " << full_path << std::endl;
     std::ifstream config_file;
     config_file.open((full_path + CONFIG_FILE_NAME).c_str());
     file_not_found = true;

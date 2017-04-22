@@ -25,8 +25,8 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
     if(config.file_not_found)
         return CONFIG_FILE_NOT_FOUND;
 
-    std::cout << "config.getFullPath(): " << config.getFullPath() << std::endl;;
     std::string path = config.getFullPath() + LOCK_FILE_NAME;
+
     if(lockFileExist(path))
         return LOCK_FILE_EXIST;
     else
