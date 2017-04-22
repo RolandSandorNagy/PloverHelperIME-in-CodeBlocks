@@ -179,7 +179,7 @@ void View::closeView()
 
 void View::adjustPopUp(int enrties, int maxOffset)
 {
-    Sleep(10);
+    Sleep(0);
 	POINT p = getCaretPosition();
 	if(p.y < 35)
 	{

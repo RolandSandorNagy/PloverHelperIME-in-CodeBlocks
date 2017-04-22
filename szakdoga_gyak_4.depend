@@ -34,7 +34,7 @@
 
 1492822699 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\defines.h
 
-1492823257 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
+1492826571 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
 	"globals.h"
 	"Config.h"
 	"Server.h"
@@ -51,7 +51,7 @@
 1492825112 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
-1492823617 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
+1492826587 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
 	"Server.h"
 	"View.h"
 	"Controller.h"
