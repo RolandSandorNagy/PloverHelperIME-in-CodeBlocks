@@ -4,15 +4,16 @@
 #include <fstream>
 
 #define LOCK_FILE_LOCATION "C:\\Users\\Rol\\AppData\\Local\\plover\\plover\\lock.txt"
+#define LOCK_FILE_NAME "lock.txt"
 #define DONE 0
-#define LOCK_FILE_EXIST -1
-#define CONFIG_FILE_NOT_FOUND -2
+#define CONFIG_FILE_NOT_FOUND -1
+#define LOCK_FILE_EXIST -2
 #define DELETE_FILE_FAILED "Error deleting file"
 
 
-bool lockFileExist();
-void makeLockFile();
-void deleteLockFile();
+bool lockFileExist(std::string);
+void makeLockFile(std::string);
+void deleteLockFile(std::string);
 
 
 int WINAPI WinMain (HINSTANCE hThisInstance,
@@ -20,14 +21,17 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
                     LPSTR lpszArgument,
                     int nCmdShow)
 {
-    if(lockFileExist())
-        return LOCK_FILE_EXIST;
-    else
-        makeLockFile();
-
     Config config;
     if(config.file_not_found)
         return CONFIG_FILE_NOT_FOUND;
+
+    std::cout << "config.getFullPath(): " << config.getFullPath() << std::endl;;
+    std::string path = config.getFullPath() + LOCK_FILE_NAME;
+    if(lockFileExist(path))
+        return LOCK_FILE_EXIST;
+    else
+        makeLockFile(path);
+
 
     pthread_t windowThread;
     pthread_t serverThread;
@@ -45,28 +49,28 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
     pthread_join(windowThread, &windowThreadStatus);
     pthread_join(serverThread, &serverThreadStatus);
 
-    deleteLockFile();
+    deleteLockFile(path);
 
     return DONE;
 }
 
-bool lockFileExist()
+bool lockFileExist(std::string fname)
 {
-    std::ifstream lockFile(LOCK_FILE_LOCATION);
+    std::ifstream lockFile(fname.c_str());
     if(lockFile)
         return true;
     return false;
 }
 
-void makeLockFile()
+void makeLockFile(std::string fname)
 {
-    std::ofstream lockFile(LOCK_FILE_LOCATION);
+    std::ofstream lockFile(fname.c_str());
     if(lockFile.is_open())
         lockFile.close();
 }
 
-void deleteLockFile()
+void deleteLockFile(std::string fname)
 {
-    if(remove(LOCK_FILE_LOCATION) != 0)
+    if(remove(fname.c_str()) != 0)
         std::cerr << DELETE_FILE_FAILED << std::endl;
 }

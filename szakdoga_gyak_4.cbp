@@ -37,6 +37,8 @@
 			<Add library="kernel32" />
 			<Add library="comctl32" />
 		</Linker>
+		<Unit filename="Config.cpp" />
+		<Unit filename="Config.h" />
 		<Unit filename="Controller.cpp" />
 		<Unit filename="Controller.h" />
 		<Unit filename="Server.cpp" />

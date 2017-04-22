@@ -16,7 +16,7 @@ private: /* members */
     std::string host;
     std::string port;
     char szPath[MAX_PATH];
-
+    std::string full_path;
 
 public: /* methods */
     Config();
@@ -24,7 +24,7 @@ public: /* methods */
     std::string getHost();
     std::string getPort();
     int getPopupTimeout();
-
+    std::string getFullPath();
 
 private: /* methods */
 
