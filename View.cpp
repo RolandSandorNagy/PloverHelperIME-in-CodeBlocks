@@ -2,6 +2,7 @@
 
 
 #define WINDOW_NAME "MIME POPUP WINDOW"
+#define MIME_APP_NAME "MIME Windows App"
 #define DEFAULT_POPUP_HEIGHT 300
 #define DEFAULT_POPUP_WIDTH 300
 #define PLOVER_GRAY 240
@@ -36,6 +37,8 @@ namespace global
 
 View::View(HINSTANCE* hInst)
 {
+    hInstance = hInst;
+
     popupHeight = DEFAULT_POPUP_HEIGHT;
     popupWidth  = DEFAULT_POPUP_WIDTH;
     ViewNS::on = true;
@@ -45,13 +48,10 @@ View::View(HINSTANCE* hInst)
     bgColor = RGB(PLOVER_GRAY, PLOVER_GRAY, PLOVER_GRAY);
     fontColor = RGB(183, 183, 18); // some yellowish
 
-    hInstance = hInst;
-
     initWincl(hInst);
 
     if(!register_Class())
         return;
-
     createWindow();
 }
 
@@ -86,7 +86,7 @@ void View::createWindow()
 {
     hwnd = CreateWindowEx ( WS_EX_TOPMOST | WS_EX_TOOLWINDOW,
                             ViewNS::szClassName,
-                            _T("Code::Blocks Template Windows App"),
+                            _T(MIME_APP_NAME),
                             WS_POPUP,
                             0,
                             0,
@@ -184,6 +184,7 @@ void View::adjustPopUp(int enrties, int maxOffset)
 {
     Sleep(0);
 	POINT p = getCaretPosition();
+	avoidScreenEdges(&p);
 	if(p.y < 35)
 	{
 		hidePopup();
@@ -194,6 +195,35 @@ void View::adjustPopUp(int enrties, int maxOffset)
 	movePopup(p.x, p.y, popupWidth, popupHeight);
 	return;
 }
+
+void View::avoidScreenEdges(POINT* p)
+{
+    RECT actualDesktop;
+    GetWindowRect(GetDesktopWindow(), &actualDesktop);
+
+    int W = actualDesktop.right;                // get screen width
+    int H = GetSystemMetrics(SM_CYFULLSCREEN);  // get screen height
+    int w = popupWidth;                         // get popup width
+    int h = popupHeight;                        // get popup height
+    int wb = W - w;                             // width border
+    int hb = H - h;                             // height border
+
+    if(p->x < 0 || p->x > W || p->y < 0 || p->y > actualDesktop.bottom)
+        return;
+
+    if(p->x <= wb && p->y <= hb)
+        return;
+    else if(p->x > wb && p->y <= hb) // Right side of screen
+        p->x = wb;
+    else if(p->x <= wb && p->y > hb) // Bottom side of screen
+        p->y = hb;
+    else if(p->x > wb && p->y > hb)  // Bottom right corner of screen
+    {
+        p->x = wb;
+        p->y = hb - LINE_HEIGHT - h;
+    }
+}
+
 
 POINT View::getCaretPosition()
 {

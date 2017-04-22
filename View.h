@@ -38,6 +38,7 @@ public: /* methods */
     void clearPopup(int);
     void closeView();
     void adjustPopUp(int, int);
+    void avoidScreenEdges(POINT*);
     void displaySuggestions(std::vector<Suggestion>);
     int getMaxOffset(std::vector<Suggestion>);
     int getPopupTimeout();
