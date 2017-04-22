@@ -27,5 +27,8 @@
 
 #include <algorithm>
 
+#include <TCHAR.h>
+#include <Shlobj.h>
+
 
 #endif // INCLUDES_H_INCLUDED

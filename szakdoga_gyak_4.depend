@@ -8,7 +8,7 @@
 1492822268 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.h
 	"includes.h"
 
-1492822662 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\includes.h
+1492840416 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\includes.h
 	<iostream>
 	<stdlib.h>
 	<conio.h>
@@ -26,6 +26,8 @@
 	<iostream>
 	<fstream>
 	<algorithm>
+	<TCHAR.h>
+	<Shlobj.h>
 
 1492833929 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
 	"defines.h"
@@ -48,7 +50,7 @@
 	"includes.h"
 	"Config.h"
 
-1492837063 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
+1492837731 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
 1492826587 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
@@ -62,9 +64,9 @@
 1492823695 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\suggestion.h
 	"includes.h"
 
-1492822686 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\config.cpp
+1492841049 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\config.cpp
 	"Config.h"
 
-1492823300 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\config.h
+1492840953 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\config.h
 	"includes.h"
 

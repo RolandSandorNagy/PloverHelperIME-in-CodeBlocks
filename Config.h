@@ -15,6 +15,7 @@ private: /* members */
     int suggest_by;
     std::string host;
     std::string port;
+    char szPath[MAX_PATH];
 
 
 public: /* methods */
