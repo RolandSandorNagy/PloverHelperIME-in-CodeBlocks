@@ -98,10 +98,13 @@ void View::createWindow()
                             NULL);
 }
 
-void View::showPopup()
+void View::showPopup(std::vector<Suggestion> suggestions)
 {
     ShowWindow(hwnd, SW_SHOW);
     show = true;
+
+    clearPopup(MAX_LINES + 1);
+    displayBestTenSuggestion(suggestions);
 }
 
 void View::hidePopup()
@@ -189,7 +192,6 @@ void View::adjustPopUp(int enrties, int maxOffset)
     popupWidth = maxOffset * SUG_WIDTH + MARGIN + (2 * MULT_WIDTH);
 	popupHeight = enrties * LINE_HEIGHT;
 	movePopup(p.x, p.y, popupWidth, popupHeight);
-    showPopup();
 	return;
 }
 
@@ -225,8 +227,7 @@ void View::displaySuggestions(std::vector<Suggestion> suggestions)
         return;
 
     adjustPopUp(suggestions.size(), getMaxOffset(suggestions));
-    clearPopup(MAX_LINES + 1);
-    displayBestTenSuggestion(suggestions);
+    showPopup(suggestions);
     hideTimeout();
 }
 
@@ -291,8 +292,6 @@ LRESULT CALLBACK ViewNS::WindowProcedure(HWND hwnd, UINT message, WPARAM wParam,
 void* ViewNS::wThreadMethod(void* hInst)
 {
     View view((HINSTANCE*)hInst);
-    view.showPopup();
-
     global::hgView = &view;
 
     MSG messages;

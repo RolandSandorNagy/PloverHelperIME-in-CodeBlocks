@@ -31,7 +31,7 @@ public: /* methods */
     View(HINSTANCE*);
     View();
     ~View();
-    void showPopup();
+    void showPopup(std::vector<Suggestion>);
     void hidePopup();
     bool getShow();
     void movePopup(int, int, int, int);

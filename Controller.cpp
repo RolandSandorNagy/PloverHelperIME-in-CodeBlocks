@@ -99,7 +99,6 @@ void Controller::proceedPause()
 void Controller::proceedResume()
 {
     isActive = true;
-    proceedShow();
 }
 
 void Controller::proceedStop()
@@ -110,7 +109,7 @@ void Controller::proceedStop()
 
 void Controller::proceedShow()
 {
-    view->showPopup();
+    view->showPopup(suggestions);
 }
 
 void Controller::proceedHide()

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1492823714 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
+1492828628 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
 	"Controller.h"
 	"Suggestion.h"
 	"Server.h"
@@ -27,7 +27,7 @@
 	<fstream>
 	<algorithm>
 
-1492823972 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
+1492828667 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
 	"defines.h"
 	"includes.h"
 	"Suggestion.h"
