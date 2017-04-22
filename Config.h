@@ -15,7 +15,6 @@ private: /* members */
     int suggest_by;
     std::string host;
     std::string port;
-    //int port;
 
 
 public: /* methods */
@@ -23,8 +22,8 @@ public: /* methods */
     ~Config();
     std::string getHost();
     std::string getPort();
-    //int getPort();
     int getPopupTimeout();
+
 
 private: /* methods */
 

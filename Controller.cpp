@@ -4,6 +4,10 @@
 #include "View.h"
 
 
+#define CMD_PREFIX "CMD::"
+#define SAVE_FILE_NAME "lastinput.txt"
+
+
 namespace global
 {
     extern View* hgView;
@@ -17,8 +21,6 @@ namespace global
         MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], *size_needed);
         return wstrTo;
     }
-
-
 }
 
 
@@ -46,9 +48,9 @@ void Controller::processMessage(char* recvbuf, int recvbuflen, unsigned int iRes
 bool Controller::commandReceived(char* recvbuf)
 {
     std::string str(recvbuf);
-    if(str.substr(0,5) == "CMD::")
+    if(str.substr(0, strlen(CMD_PREFIX)) == CMD_PREFIX)
     {
-        processCommand(str.substr(5, str.size()));
+        processCommand(str.substr(strlen(CMD_PREFIX), str.size()));
         return true;
     }
     return false;
@@ -151,20 +153,10 @@ void Controller::proceedSave()
 {
     if(inputHistory.size() == 0)
         return;
-    file.open("lastinput.txt");
+    file.open(SAVE_FILE_NAME);
     file << inputHistory[inputHistory.size() - 1].c_str() << std::endl;
     file.close();
 }
-
-/*
-std::wstring Controller::s2ws(const std::string& str, int *size_needed)
-{
-    *size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
-    std::wstring wstrTo( *size_needed, 0 );
-    MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], *size_needed);
-    return wstrTo;
-}
-*/
 
 void Controller::collectSuggestions(std::wstring ws)
 {
@@ -198,7 +190,7 @@ bool Controller::suggestionsHasMember(std::wstring ws)
 
 void Controller::sortSuggestions()
 {
-    std::sort(suggestions.begin(), suggestions.end(), less_than_key());
+    std::sort(suggestions.begin(), suggestions.end(), suggestion_compare_operator());
 }
 
 

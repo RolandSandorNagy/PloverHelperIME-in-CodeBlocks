@@ -10,7 +10,7 @@ class View
 {
 
 public: /* members */
-    int maxThreadId = 0;
+    int maxThreadId;
 
 
 private: /* members */
@@ -22,6 +22,7 @@ private: /* members */
     int popupWidth;
     int popupHeight;
     COLORREF bgColor;
+    COLORREF fontColor;
     int popupTimeout;
     pthread_t *timeoutThread = NULL;
 

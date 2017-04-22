@@ -23,16 +23,16 @@ private: /* members */
     std::vector<std::wstring> inputHistory;
     std::vector<Suggestion> suggestions;
 
+
 public:  /* methods */
     Controller(View*, Server*);
     Controller();
     ~Controller();
-
     void processMessage(char*, int, unsigned int);
+
 
 private: /* methods */
     POINT getCaretPosition();
-    //std::wstring s2ws(const std::string&, int *size_needed);
     void proceedPause();
     void proceedResume();
     void proceedStop();
@@ -44,7 +44,7 @@ private: /* methods */
     void messageReceived(char*, int , unsigned int);
     void processCommand(std::string);
     void collectSuggestions(std::wstring);
-    bool suggestionsHasMember(std::wstring ws);
+    bool suggestionsHasMember(std::wstring);
     void handleSuggestions();
     void sortSuggestions();
 

@@ -11,7 +11,6 @@ namespace global
     bool isRunning = true;
 
     extern std::wstring s2ws(const std::string&, int*);
-
 }
 
 #endif // GLOBALS_H_INCLUDED

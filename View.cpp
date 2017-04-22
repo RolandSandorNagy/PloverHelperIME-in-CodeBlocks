@@ -1,10 +1,23 @@
 #include "View.h"
 
 
+#define WINDOW_NAME "MIME POPUP WINDOW"
+#define DEFAULT_POPUP_HEIGHT 300
+#define DEFAULT_POPUP_WIDTH 300
+#define PLOVER_GRAY 240
+#define MARGIN 5
+#define LINE_HEIGHT 20
+#define MULT_WIDTH 15
+#define SUG_WIDTH 10
+#define MAX_LINES 14
+#define MAX_SUGGS 10
+#define SECOND 1000
+
+
 namespace ViewNS
 {
     bool on;
-    TCHAR szClassName[ ] = _T("CodeBlocksWindowsApp");
+    TCHAR szClassName[ ] = _T(WINDOW_NAME);
 
     LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);
     void* wThreadMethod(void*);
@@ -21,14 +34,16 @@ namespace global
 }
 
 
-View::View(HINSTANCE *hInst)
+View::View(HINSTANCE* hInst)
 {
+    popupHeight = DEFAULT_POPUP_HEIGHT;
+    popupWidth  = DEFAULT_POPUP_WIDTH;
     ViewNS::on = true;
+    maxThreadId = 0;
     ln = 0;
-    popupWidth  = 300;
-    popupHeight = 300;
 
-    bgColor = RGB(240, 240, 240);
+    bgColor = RGB(PLOVER_GRAY, PLOVER_GRAY, PLOVER_GRAY);
+    fontColor = RGB(183, 183, 18); // some yellowish
 
     hInstance = hInst;
 
@@ -57,7 +72,7 @@ void View::initWincl(HINSTANCE *hInst)
     wincl.lpszMenuName = NULL;
     wincl.cbClsExtra = 0;
     wincl.cbWndExtra = 0;
-    wincl.hbrBackground = CreateSolidBrush(bgColor);//(HBRUSH) COLOR_BACKGROUND;
+    wincl.hbrBackground = CreateSolidBrush(bgColor);
 }
 
 bool View::register_Class()
@@ -108,12 +123,17 @@ void View::movePopup(int x, int y, int width, int height)
 void View::drawStringOnPopUp(std::wstring ws, unsigned int length, int mult)
 {
 	PAINTSTRUCT ps;
+	RECT rect;
+
 	HDC hDC = GetDC(hwnd);
 
-	SetTextColor(hDC, RGB(183, 183, 18));
-	SetBkColor(hDC, RGB(240, 240, 240));
+	SetBkColor(hDC, bgColor);
+	SetTextColor(hDC, fontColor);
 
-	RECT rect = { 5, ln * 20, popupWidth + 5, 5 + (ln + 1) * 20 };
+    rect.left   = MARGIN;
+    rect.top    = ln * LINE_HEIGHT;
+    rect.right  = MARGIN + popupWidth;
+    rect.bottom = (ln + 1) * LINE_HEIGHT;
 	DrawText(hDC, ws.c_str(), ws.length(), &rect, 0);
 
     int size_needed;
@@ -121,7 +141,8 @@ void View::drawStringOnPopUp(std::wstring ws, unsigned int length, int mult)
     ss << mult;
     std::string s = ss.str();
     std::wstring wsmult = global::s2ws(s, &size_needed);
-    rect = { popupWidth - 15, ln * 20, popupWidth + 5, 5 + (ln + 1) * 20 };
+
+    rect.left   = popupWidth - MULT_WIDTH;
     DrawText(hDC, wsmult.c_str(), wsmult.length(), &rect, 0);
 
 	EndPaint(hwnd, &ps);
@@ -130,18 +151,23 @@ void View::drawStringOnPopUp(std::wstring ws, unsigned int length, int mult)
 
 void View::handleNextLine(HDC hDC)
 {
-	ln = (ln > 14 ? 0 : ln + 1);
+	ln = (ln > MAX_LINES ? 0 : ln + 1);
 	if (ln == 0)
-    clearPopup(15);
+    clearPopup(MAX_LINES + 1);
 }
 
 void View::clearPopup(int l)
 {
-    if(ln + l <= 14)
+    if(ln + l <= MAX_LINES)
         return;
+
+    RECT rect;
     HDC hDC = GetDC(hwnd);
-    RECT r = { 0, 0, 300, 300 };
-    FillRect(hDC, &r, CreateSolidBrush(bgColor));//(HBRUSH)(LTGRAY_BRUSH));
+    rect.left = 0;
+    rect.top = 0;
+    rect.right = DEFAULT_POPUP_WIDTH;
+    rect.bottom = DEFAULT_POPUP_HEIGHT;
+    FillRect(hDC, &rect, CreateSolidBrush(bgColor));
     SetROP2(hDC, R2_NOTXORPEN);
     ln = 0;
 }
@@ -155,16 +181,15 @@ void View::adjustPopUp(int enrties, int maxOffset)
 {
     Sleep(10);
 	POINT p = getCaretPosition();
-	if (p.y < 35)
+	if(p.y < 35)
 	{
 		hidePopup();
 		return;
 	}
-    popupWidth = maxOffset * 10 + 5 + 50;
-	popupHeight = enrties * 20;
+    popupWidth = maxOffset * SUG_WIDTH + MARGIN + (2 * MULT_WIDTH);
+	popupHeight = enrties * LINE_HEIGHT;
 	movePopup(p.x, p.y, popupWidth, popupHeight);
     showPopup();
-
 	return;
 }
 
@@ -197,14 +222,10 @@ POINT View::getCaretPosition()
 void View::displaySuggestions(std::vector<Suggestion> suggestions)
 {
     if(suggestions.size() == 0)
-    {
-        hidePopup();
         return;
-    }
 
-    adjustPopUp(suggestions.size(),
-                getMaxOffset(suggestions));
-    clearPopup(15);
+    adjustPopUp(suggestions.size(), getMaxOffset(suggestions));
+    clearPopup(MAX_LINES + 1);
     displayBestTenSuggestion(suggestions);
     hideTimeout();
 }
@@ -212,13 +233,9 @@ void View::displaySuggestions(std::vector<Suggestion> suggestions)
 int View::getMaxOffset(std::vector<Suggestion> suggestions)
 {
     int max = 0;
-    for(int i = suggestions.size() - 1; i >= 0 && suggestions.size() - i < 10; --i)
-    {
-        if(suggestions[i].getWText().size() > max)
-        {
+    for(int i = suggestions.size() - 1; i >= 0 && suggestions.size() - i < MAX_SUGGS; --i)
+        if((int)suggestions[i].getWText().size() > max)
             max = suggestions[i].getWText().size();
-        }
-    }
     return max;
 }
 
@@ -232,10 +249,8 @@ void View::hideTimeout()
 
 void View::displayBestTenSuggestion(std::vector<Suggestion> suggestions)
 {
-    for(int i = suggestions.size() - 1; i >= 0 && suggestions.size() - i < 10; --i)
-    {
+    for(int i = suggestions.size() - 1; i >= 0 && suggestions.size() - i < MAX_SUGGS; --i)
         drawStringOnPopUp(suggestions[i].getWText(), suggestions[i].getWText().size(), suggestions[i].getMultiplicity());
-    }
 }
 
 int View::getPopupTimeout()
@@ -293,9 +308,7 @@ void* ViewNS::wThreadMethod(void* hInst)
 void* ViewNS::toThreadMethod(void* id)
 {
     int to = ((View*)global::hgView)->getPopupTimeout();
-    Sleep(to * 1000);
-    std::cout << "maxThreadId: " << ((View*)global::hgView)->maxThreadId << std::endl;
-    std::cout << "id: " << (INT)id << std::endl;
+    Sleep(to * SECOND);
     if(((View*)global::hgView)->maxThreadId != (INT)id)
         return (void*) 1;
     ((View*)global::hgView)->hidePopup();

@@ -24,12 +24,12 @@ public:  /* methods */
     void setMultiplicity(int);
     void setWText(std::wstring);
 
-private: /* methods */
 
+private: /* methods */
 
 };
 
-struct less_than_key
+struct suggestion_compare_operator
 {
     inline bool operator() (Suggestion& sug1, Suggestion& sug2)
     {

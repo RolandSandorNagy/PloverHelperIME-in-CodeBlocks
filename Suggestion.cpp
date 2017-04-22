@@ -1,5 +1,6 @@
 #include "Suggestion.h"
 
+
 Suggestion::Suggestion(int m, std::wstring wt)
 {
     multiplicity = m;

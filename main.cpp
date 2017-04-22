@@ -3,6 +3,12 @@
 #include "Server.h"
 #include <fstream>
 
+#define LOCK_FILE_LOCATION "C:\\Users\\Rol\\AppData\\Local\\plover\\plover\\lock.txt"
+#define DONE 0
+#define LOCK_FILE_EXIST -1
+#define CONFIG_FILE_NOT_FOUND -2
+
+
 bool lockFileExist();
 void makeLockFile();
 void deleteLockFile();
@@ -14,13 +20,13 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
                     int nCmdShow)
 {
     if(lockFileExist())
-        return -1;
+        return LOCK_FILE_EXIST;
     else
         makeLockFile();
 
     Config config;
     if(config.file_not_found)
-        return -2;
+        return CONFIG_FILE_NOT_FOUND;
 
     pthread_t windowThread;
     pthread_t serverThread;
@@ -40,31 +46,28 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
 
     deleteLockFile();
 
-    return 0;
+    return DONE;
 }
 
 bool lockFileExist()
 {
-    std::ifstream my_file("C:\\Users\\Rol\\AppData\\Local\\plover\\plover\\lock.txt");
-    if (my_file)
-    {
-        deleteLockFile();
+    std::ifstream lockFile(LOCK_FILE_LOCATION);
+    if(lockFile)
         return true;
-    }
     return false;
 }
 
 void makeLockFile()
 {
-    std::ofstream lockFile("C:\\Users\\Rol\\AppData\\Local\\plover\\plover\\lock.txt");
+    std::ofstream lockFile(LOCK_FILE_LOCATION);
     if(lockFile.is_open())
         lockFile.close();
 }
 
 void deleteLockFile()
 {
-    if( remove( "C:\\Users\\Rol\\AppData\\Local\\plover\\plover\\lock.txt" ) != 0 )
-        perror( "Error deleting file" );
+    if(remove(LOCK_FILE_LOCATION) != 0)
+        perror("Error deleting file");
     else
-        puts( "File successfully deleted" );
+        puts("File successfully deleted");
 }

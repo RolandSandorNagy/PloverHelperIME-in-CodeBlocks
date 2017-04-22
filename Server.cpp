@@ -3,6 +3,16 @@
 #include "Controller.h"
 
 
+#define INIT_WINSOCK_FAILED "getaddrinfo failed with error: "
+#define ADDRESS_RESOLVE_FAILED "getaddrinfo failed with error: "
+#define CREATE_SOCKET_FAILED "socket failed with error: "
+#define BIND_SOCKET_FAILED "bind failed with error: "
+#define LISTEN_SOCKET_FAILED "listen failed with error: "
+#define ACCEPT_CLIENT_FAILED "accept failed with error: "
+#define RECEIVE_FAILED "recv failed with error: "
+#define SHUTDOWN_FAILED "shutdown failed with error: "
+
+
 namespace ServerNS
 {
     void* sThreadMethod(void* hInst);
@@ -30,12 +40,9 @@ Server::~Server() {}
 void Server::initServer(Config* conf)
 {
     config = conf;
-
     recvbuflen = DEFAULT_BUFLEN;
-
 	ListenSocket = INVALID_SOCKET;
 	ClientSocket = INVALID_SOCKET;
-
 	result = NULL;
 }
 
@@ -65,7 +72,7 @@ bool Server::initWinSock()
 {
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (iResult != 0) {
-        std::cerr << "getaddrinfo failed with error: " << iResult << std::endl;
+        std::cerr << INIT_WINSOCK_FAILED << iResult << std::endl;
         WSACleanup();
         return false;
     }
@@ -84,7 +91,7 @@ bool Server::resolveServerAddressAndPort()
     iResult = getaddrinfo(config->getHost().c_str(), config->getPort().c_str(), &hints, &result);
     std::cout << config->getHost() << std::endl;
     if (iResult != 0) {
-        std::cerr << "getaddrinfo failed with error: " << iResult << std::endl;
+        std::cerr << ADDRESS_RESOLVE_FAILED << iResult << std::endl;
         WSACleanup();
         return false;
     }
@@ -95,7 +102,7 @@ bool Server::createSocket()
 {
     ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
     if (ListenSocket == INVALID_SOCKET) {
-        std::cerr << "socket failed with error: " << WSAGetLastError() << std::endl;
+        std::cerr << CREATE_SOCKET_FAILED << WSAGetLastError() << std::endl;
         freeaddrinfo(result);
         WSACleanup();
         return false;
@@ -107,7 +114,7 @@ bool Server::setupListenSocket()
 {
     iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
     if (iResult == SOCKET_ERROR) {
-        std::cerr << "bind failed with error: " << WSAGetLastError() << std::endl;
+        std::cerr << BIND_SOCKET_FAILED << WSAGetLastError() << std::endl;
         freeaddrinfo(result);
         CleanUp();
         return false;
@@ -117,7 +124,7 @@ bool Server::setupListenSocket()
 
     iResult = listen(ListenSocket, SOMAXCONN);
     if (iResult == SOCKET_ERROR) {
-        std::cerr << "listen failed with error: " << WSAGetLastError() << std::endl;
+        std::cerr << LISTEN_SOCKET_FAILED << WSAGetLastError() << std::endl;
         CleanUp();
         return false;
     }
@@ -129,7 +136,7 @@ bool Server::acceptClientSocket()
 {
     ClientSocket = accept(ListenSocket, NULL, NULL);
     if (ClientSocket == INVALID_SOCKET) {
-        std::cerr << "accept failed with error: " << WSAGetLastError() << std::endl;
+        std::cerr << ACCEPT_CLIENT_FAILED << WSAGetLastError() << std::endl;
         CleanUp();
         return false;
     }
@@ -152,7 +159,7 @@ bool Server::receiveUntilPeerShutsDown()
             recvbuf[iResult] = '\0';
             controller->processMessage(recvbuf, recvbuflen, iResult);
         } else if (iResult < 0) {
-            std::cerr << "recv failed with error: " << WSAGetLastError() << std::endl;
+            std::cerr << RECEIVE_FAILED << WSAGetLastError() << std::endl;
             CleanUp();
             return false;
         }
@@ -165,7 +172,7 @@ void Server::shutDownConnection()
 {
     iResult = shutdown(ClientSocket, SD_SEND);
     if (iResult == SOCKET_ERROR) {
-        std::cerr << "shutdown failed with error: " << WSAGetLastError() << std::endl;
+        std::cerr << SHUTDOWN_FAILED << WSAGetLastError() << std::endl;
         CleanUp();
         return;
     }

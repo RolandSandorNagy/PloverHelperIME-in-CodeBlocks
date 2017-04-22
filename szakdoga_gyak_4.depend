@@ -1,14 +1,14 @@
 # depslib dependency file v1.0
-1492814000 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
+1492823714 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
 	"Controller.h"
 	"Suggestion.h"
 	"Server.h"
 	"View.h"
 
-1492642218 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.h
+1492822268 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.h
 	"includes.h"
 
-1492641831 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\includes.h
+1492822662 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\includes.h
 	<iostream>
 	<stdlib.h>
 	<conio.h>
@@ -27,14 +27,14 @@
 	<fstream>
 	<algorithm>
 
-1492813979 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
+1492823972 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
 	"defines.h"
 	"includes.h"
 	"Suggestion.h"
 
-1492324814 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\defines.h
+1492822699 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\defines.h
 
-1492808102 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
+1492823257 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
 	"globals.h"
 	"Config.h"
 	"Server.h"
@@ -43,28 +43,28 @@
 1492642339 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\globals.h
 	"View.h"
 
-1492780659 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.h
+1492823287 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.h
 	"defines.h"
 	"includes.h"
 	"Config.h"
 
-1492814335 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
+1492822031 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
-1492781799 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
+1492823617 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
 	"Server.h"
 	"View.h"
 	"Controller.h"
 
-1492640741 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\suggestion.cpp
+1492823749 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\suggestion.cpp
 	"Suggestion.h"
 
-1492640948 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\suggestion.h
+1492823695 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\suggestion.h
 	"includes.h"
 
-1492783518 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\config.cpp
+1492822686 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\config.cpp
 	"Config.h"
 
-1492783511 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\config.h
+1492823300 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\config.h
 	"includes.h"
 

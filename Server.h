@@ -6,9 +6,9 @@
 #include "includes.h"
 #include "Config.h"
 
+
 class View;
 class Controller;
-//class Config;
 
 
 struct thread_data{
@@ -27,20 +27,15 @@ public: /* members */
 private: /* members */
     Config* config;
 	WSADATA wsaData;
-
 	std::string host;
 	int port;
-
 	SOCKET ListenSocket;
 	SOCKET ClientSocket;
-
 	struct addrinfo *result;
 	struct addrinfo hints;
-
 	int iResult;
 	int recvbuflen;
 	char recvbuf[DEFAULT_BUFLEN];
-
     View *view;
     Controller *controller;
 
@@ -49,7 +44,6 @@ public: /* methods */
     Server(Config*);
     Server();
     ~Server();
-
     void run();
 
 
