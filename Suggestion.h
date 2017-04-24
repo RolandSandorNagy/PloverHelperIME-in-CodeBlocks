@@ -13,14 +13,17 @@ public:  /* members */
 private: /* members */
     int multiplicity;
     std::wstring wtext;
+    std::wstring wstroke;
 
 
 public:  /* methods */
     Suggestion(int, std::wstring);
+    Suggestion(int, std::wstring, std::wstring);
     Suggestion();
     ~Suggestion();
     int getMultiplicity();
     std::wstring getWText();
+    std::wstring getWStroke();
     void setMultiplicity(int);
     void setWText(std::wstring);
 

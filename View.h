@@ -52,6 +52,7 @@ private: /* methods */
     void handleNextLine(HDC);
     POINT getCaretPosition();
     void drawStringOnPopUp(std::wstring, unsigned int, int);
+    void drawStringOnPopUp(Suggestion s);
     void displayBestTenSuggestion(std::vector<Suggestion>);
     void hideTimeout();
 

@@ -7,6 +7,13 @@ Suggestion::Suggestion(int m, std::wstring wt)
     wtext = wt;
 }
 
+Suggestion::Suggestion(int m, std::wstring wt, std::wstring ws)
+{
+    multiplicity = m;
+    wtext = wt;
+    wstroke = ws;
+}
+
 Suggestion::Suggestion()
 {
 
@@ -25,6 +32,11 @@ int Suggestion::getMultiplicity()
 std::wstring Suggestion::getWText()
 {
     return wtext;
+}
+
+std::wstring Suggestion::getWStroke()
+{
+    return wstroke;
 }
 
 void Suggestion::setMultiplicity(int m)

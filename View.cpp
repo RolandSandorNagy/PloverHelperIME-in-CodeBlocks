@@ -8,7 +8,7 @@
 #define PLOVER_GRAY 240
 #define MARGIN 5
 #define LINE_HEIGHT 20
-#define MULT_WIDTH 15
+#define MULT_WIDTH 75
 #define SUG_WIDTH 10
 #define MAX_LINES 14
 #define MAX_SUGGS 10
@@ -152,6 +152,30 @@ void View::drawStringOnPopUp(std::wstring ws, unsigned int length, int mult)
 	handleNextLine(hDC);
 }
 
+void View::drawStringOnPopUp(Suggestion s)
+{
+	PAINTSTRUCT ps;
+	RECT rect;
+
+	HDC hDC = GetDC(hwnd);
+
+	SetBkColor(hDC, bgColor);
+	SetTextColor(hDC, fontColor);
+
+    rect.left   = MARGIN;
+    rect.top    = ln * LINE_HEIGHT;
+    rect.right  = MARGIN + popupWidth;
+    rect.bottom = (ln + 1) * LINE_HEIGHT;
+	DrawText(hDC, s.getWText().c_str(), s.getWText().length(), &rect, 0);
+
+
+    rect.left   = popupWidth - MULT_WIDTH;
+    DrawText(hDC, s.getWStroke().c_str(), s.getWStroke().length(), &rect, 0);
+
+	EndPaint(hwnd, &ps);
+	handleNextLine(hDC);
+}
+
 void View::handleNextLine(HDC hDC)
 {
 	ln = (ln > MAX_LINES ? 0 : ln + 1);
@@ -281,7 +305,8 @@ void View::hideTimeout()
 void View::displayBestTenSuggestion(std::vector<Suggestion> suggestions)
 {
     for(int i = suggestions.size() - 1; i >= 0 && suggestions.size() - i < MAX_SUGGS; --i)
-        drawStringOnPopUp(suggestions[i].getWText(), suggestions[i].getWText().size(), suggestions[i].getMultiplicity());
+        drawStringOnPopUp(suggestions[i]);
+        //drawStringOnPopUp(suggestions[i].getWText(), suggestions[i].getWText().size(), suggestions[i].getMultiplicity());
 }
 
 int View::getPopupTimeout()

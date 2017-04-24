@@ -42,6 +42,7 @@ private: /* methods */
     void proceedSave();
     bool commandReceived(char*);
     void messageReceived(char*, int , unsigned int);
+    std::vector<Suggestion> createSuggestionVector(std::string s);
     void processCommand(std::string);
     void collectSuggestions(std::wstring);
     bool suggestionsHasMember(std::wstring);

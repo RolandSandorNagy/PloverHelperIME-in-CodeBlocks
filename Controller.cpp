@@ -60,6 +60,49 @@ void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iRe
 {
     int size_needed;
     std::string s(recvbuf);
+
+    //std::wstring ws = global::s2ws(s, &size_needed);
+
+    //inputHistory.push_back(ws);
+
+    //collectSuggestions(ws);
+    //sortSuggestions();
+
+    suggestions = createSuggestionVector(s);
+
+    view->displaySuggestions(suggestions);
+}
+
+std::vector<Suggestion> Controller::createSuggestionVector(std::string s)
+{
+    std::vector<Suggestion> suggs;
+    suggs.clear();
+    // TODO
+    std::string w1;
+    std::stringstream s1(s);
+    while( getline(s1, w1, ';') )
+    {
+        std::cout << w1 << "\n";
+        std::string stroke;
+        std::string translation;
+        std::stringstream s2(w1);
+        getline(s2, stroke, ':');
+        getline(s2, translation, ':');
+
+        int size_needed;
+        std::wstring wstroke = global::s2ws(stroke, &size_needed);
+        std::wstring wtranslation = global::s2ws(translation, &size_needed);
+        Suggestion s(0, wstroke, wtranslation);
+        suggs.push_back(s);
+    }
+    return suggs;
+}
+
+/*
+void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iResult)
+{
+    int size_needed;
+    std::string s(recvbuf);
     std::wstring ws = global::s2ws(s, &size_needed);
 
     inputHistory.push_back(ws);
@@ -69,6 +112,7 @@ void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iRe
 
     view->displaySuggestions(suggestions);
 }
+*/
 
 void Controller::processCommand(std::string str)
 {

@@ -156,6 +156,7 @@ bool Server::receiveUntilPeerShutsDown()
         if (iResult > 0) {
             recvbuf[iResult] = '\0';
             controller->processMessage(recvbuf, recvbuflen, iResult);
+            std::cout << recvbuf << std::endl;
         } else if (iResult < 0) {
             std::cerr << RECEIVE_FAILED << WSAGetLastError() << std::endl;
             CleanUp();
