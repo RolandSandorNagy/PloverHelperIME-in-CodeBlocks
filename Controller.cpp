@@ -1,10 +1,11 @@
 #include "Controller.h"
 #include "Server.h"
 #include "View.h"
+#include <ctime>
 
 
 #define CMD_PREFIX "CMD::"
-#define SAVE_FILE_NAME "lastinput.txt"
+#define SAVE_FILE_NAME "lastinput.csv"
 #define NO_SUGGESTION "none"
 #define SUGG_DELIMETER_CHAR ';'
 #define STROKE_DELIMETER_CHAR ':'
@@ -61,7 +62,6 @@ bool Controller::commandReceived(char* recvbuf)
 
 void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iResult)
 {
-    int size_needed;
     std::string sv_str(recvbuf);
     suggestions = createSuggestionVector(sv_str);
     view->displaySuggestions(suggestions, current_stroke);
@@ -78,16 +78,19 @@ std::vector<Suggestion> Controller::createSuggestionVector(std::string sv_str)
 
 std::vector<Suggestion> Controller::buildSuggestions(std::string sv_str)
 {
+    std::cout << "itt vagyok." << std::endl;
     std::vector<Suggestion> suggs;
     std::string s;
     std::stringstream s1(sv_str);
     while( getline(s1, s, SUGG_DELIMETER_CHAR) )
     {
         std::stringstream sparts(s);
-        std::string stroke;
         std::string translation;
+        std::string stroke;
         getline(sparts, stroke, STROKE_DELIMETER_CHAR);
         getline(sparts, translation, STROKE_DELIMETER_CHAR);
+        std::cout << stroke << std::endl;
+        std::cout << translation << std::endl;
         if(stroke == CURRENT_STROKE)
             storeCurrentStroke(&sparts, translation);
         else
@@ -98,6 +101,7 @@ std::vector<Suggestion> Controller::buildSuggestions(std::string sv_str)
 
 void Controller::storeCurrentStroke(std::stringstream *sparts, std::string translation)
 {
+    std::cout << "megint itt vagyok." << std::endl;
     std::string translation2;
     getline(*sparts, translation2, STROKE_DELIMETER_CHAR);
     int size_needed;
@@ -107,6 +111,7 @@ void Controller::storeCurrentStroke(std::stringstream *sparts, std::string trans
 
 void Controller::addSuggestionToSuggs(std::vector<Suggestion> *suggs, std::string stroke, std::string translation)
 {
+    std::cout << "megint itt vagyok. 2" << std::endl;
     int size_needed;
     std::wstring wstroke = global::s2ws(stroke, &size_needed);
     std::wstring wtranslation = global::s2ws(translation, &size_needed);
@@ -162,7 +167,22 @@ void Controller::proceedHide()
 
 void Controller::proceedSave()
 {
-    // TODO
+    // TODO: encoding is not right
+    std::cout << "saving..." << std::endl;
+    std::wofstream f(SAVE_FILE_NAME, std::fstream::in | std::fstream::out | std::fstream::app);
+    f << current_stroke.getWStroke();
+    f << L", ";
+    f << current_stroke.getWText();
+    f << L", ";
+
+    time_t t = time(0);
+    struct tm * now = localtime( & t );
+    f    << (now->tm_year + 1900) << L"-"
+         << (now->tm_mon + 1) << L"-"
+         <<  now->tm_mday
+         << std::endl;
+
+    f.close();
 }
 
 

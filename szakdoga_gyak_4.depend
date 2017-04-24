@@ -1,8 +1,9 @@
 # depslib dependency file v1.0
-1493066694 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
+1493078027 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.cpp
 	"Controller.h"
 	"Server.h"
 	"View.h"
+	<ctime>
 
 1493066680 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\controller.h
 	"includes.h"
@@ -29,14 +30,14 @@
 	<TCHAR.h>
 	<Shlobj.h>
 
-1493066591 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
+1493081071 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
 	"defines.h"
 	"includes.h"
 	"Suggestion.h"
 
 1492822699 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\defines.h
 
-1492843605 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
+1493067364 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\main.cpp
 	"globals.h"
 	"Config.h"
 	"Server.h"
@@ -50,10 +51,10 @@
 	"includes.h"
 	"Config.h"
 
-1493066490 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
+1493081060 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
-1493025363 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
+1493076114 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp
 	"Server.h"
 	"View.h"
 	"Controller.h"

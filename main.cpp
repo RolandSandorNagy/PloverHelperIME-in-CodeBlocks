@@ -4,7 +4,7 @@
 #include <fstream>
 
 //#define LOCK_FILE_LOCATION "C:\\Users\\Rol\\AppData\\Local\\plover\\plover\\lock.txt"
-#define LOCK_FILE_NAME "\\lock.txt"
+#define LOCK_FILE_NAME "\\ime_lock.txt"
 #define DONE 0
 #define CONFIG_FILE_NOT_FOUND -1
 #define LOCK_FILE_EXIST -2

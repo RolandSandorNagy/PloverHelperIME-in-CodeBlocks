@@ -19,8 +19,14 @@ private: /* members */
     HWND hwnd;
     int popupTimeout;
     int popupWidth;
+    int popupW1;
+    int popupW2;
+    int popupW3;
     int popupHeight;
+    int popupH1;
+    int popupH2;
     int ln;
+    COLORREF blackColor;
     COLORREF greenColor;
     COLORREF fontColor;
     COLORREF bgColor;
@@ -44,13 +50,15 @@ private: /* methods */
     bool register_Class();
     void createWindow();
     void movePopup(int, int, int, int);
-    void drawStringOnPopUp(Suggestion s, int);
+    void drawCurrentStringOnPopUp(Suggestion);
+    void drawStringOnPopUp(Suggestion s);
     void handleNextLine(HDC);
     void clearPopup(int);
-    void adjustPopUp(int, int);
+    void adjustPopUp(int, int, int);
     void avoidScreenEdges(POINT*);
     POINT getCaretPosition();
-    int getMaxOffset(std::vector<Suggestion>);
+    int getMaxTextLength(std::vector<Suggestion>);
+    int getMaxStrokeLength(std::vector<Suggestion>);
     void hideTimeout();
     std::wstring getSubWString(std::wstring, int, int);
 
