@@ -49,3 +49,7 @@ void Suggestion::setWText(std::wstring wt)
     wtext = wt;
 }
 
+void Suggestion::setWStroke(std::wstring ws)
+{
+    wstroke = ws;
+}

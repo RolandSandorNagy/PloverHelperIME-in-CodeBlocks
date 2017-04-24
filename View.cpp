@@ -10,7 +10,7 @@
 #define LINE_HEIGHT 20
 #define MULT_WIDTH 75
 #define SUG_WIDTH 10
-#define MAX_LINES 14
+#define MAX_LINES 20
 #define MAX_SUGGS 10
 #define SECOND 1000
 
@@ -107,6 +107,18 @@ void View::showPopup(std::vector<Suggestion> suggestions)
     displayBestTenSuggestion(suggestions);
 }
 
+void View::showPopup(std::vector<Suggestion> suggestions, std::wstring current)
+{
+    ShowWindow(hwnd, SW_SHOW);
+    show = true;
+
+    int num = current.size() / 2 + 1;
+
+    clearPopup(MAX_LINES + 1);
+    for(int i = suggestions.size() - 1; i >= 0 /*&& suggestions.size() - i < MAX_SUGGS*/; --i)
+        drawStringOnPopUp(suggestions[i], num);
+}
+
 void View::hidePopup()
 {
     ShowWindow(hwnd, SW_HIDE);
@@ -152,7 +164,7 @@ void View::drawStringOnPopUp(std::wstring ws, unsigned int length, int mult)
 	handleNextLine(hDC);
 }
 
-void View::drawStringOnPopUp(Suggestion s)
+void View::drawStringOnPopUp(Suggestion s, int num)
 {
 	PAINTSTRUCT ps;
 	RECT rect;
@@ -166,11 +178,15 @@ void View::drawStringOnPopUp(Suggestion s)
     rect.top    = ln * LINE_HEIGHT;
     rect.right  = MARGIN + popupWidth;
     rect.bottom = (ln + 1) * LINE_HEIGHT;
-	DrawText(hDC, s.getWText().c_str(), s.getWText().length(), &rect, 0);
+    //if(num > 0)
+    //{
+        //std::wstring pre = getPre
 
+    //} else
+        DrawText(hDC, s.getWStroke().c_str(), s.getWStroke().length(), &rect, 0);
 
     rect.left   = popupWidth - MULT_WIDTH;
-    DrawText(hDC, s.getWStroke().c_str(), s.getWStroke().length(), &rect, 0);
+    DrawText(hDC, s.getWText().c_str(), s.getWText().length(), &rect, 0);
 
 	EndPaint(hwnd, &ps);
 	handleNextLine(hDC);
@@ -277,11 +293,22 @@ POINT View::getCaretPosition()
 
 void View::displaySuggestions(std::vector<Suggestion> suggestions)
 {
-    if(suggestions.size() == 0)
-        return;
+    //if(suggestions.size() == 0)
+        //return;
 
     adjustPopUp(suggestions.size(), getMaxOffset(suggestions));
     showPopup(suggestions);
+    hideTimeout();
+}
+
+void View::displaySuggestions(std::vector<Suggestion> suggestions, Suggestion current)
+{
+    //if(suggestions.size() == 0)
+        //return;
+    suggestions.push_back(current);
+
+    adjustPopUp(suggestions.size(), getMaxOffset(suggestions));
+    showPopup(suggestions, current.getWStroke());
     hideTimeout();
 }
 
@@ -304,8 +331,9 @@ void View::hideTimeout()
 
 void View::displayBestTenSuggestion(std::vector<Suggestion> suggestions)
 {
-    for(int i = suggestions.size() - 1; i >= 0 && suggestions.size() - i < MAX_SUGGS; --i)
-        drawStringOnPopUp(suggestions[i]);
+    for(int i = suggestions.size() - 1; i >= 0 /*&& suggestions.size() - i < MAX_SUGGS*/; --i)
+        //drawStringOnPopUp(suggestions[i]);
+        drawStringOnPopUp(suggestions[i], i);
         //drawStringOnPopUp(suggestions[i].getWText(), suggestions[i].getWText().size(), suggestions[i].getMultiplicity());
 }
 

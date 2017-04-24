@@ -26,6 +26,7 @@ public:  /* methods */
     std::wstring getWStroke();
     void setMultiplicity(int);
     void setWText(std::wstring);
+    void setWStroke(std::wstring);
 
 
 private: /* methods */

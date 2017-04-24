@@ -2,10 +2,11 @@
 #define CONTROLLER_H_INCLUDED
 
 #include "includes.h"
+#include "Suggestion.h"
 
 class View;
 class Server;
-class Suggestion;
+//class Suggestion;
 
 
 class Controller
@@ -22,7 +23,8 @@ private: /* members */
     std::wstring lastInput;
     std::vector<std::wstring> inputHistory;
     std::vector<Suggestion> suggestions;
-
+    Suggestion current_stroke;
+    //std::wstring current_stroke;
 
 public:  /* methods */
     Controller(View*, Server*);

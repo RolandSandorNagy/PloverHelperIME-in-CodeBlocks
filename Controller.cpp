@@ -1,5 +1,5 @@
 #include "Controller.h"
-#include "Suggestion.h"
+//#include "Suggestion.h"
 #include "Server.h"
 #include "View.h"
 
@@ -70,7 +70,8 @@ void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iRe
 
     suggestions = createSuggestionVector(s);
 
-    view->displaySuggestions(suggestions);
+    view->displaySuggestions(suggestions, current_stroke);
+    //view->displaySuggestions(suggestions);
 }
 
 std::vector<Suggestion> Controller::createSuggestionVector(std::string s)
@@ -78,23 +79,40 @@ std::vector<Suggestion> Controller::createSuggestionVector(std::string s)
     std::vector<Suggestion> suggs;
     suggs.clear();
     // TODO
+    if(s == "none"){
+        std::cout << "msg: none" << std::endl;
+        return suggs;
+    }
     std::string w1;
     std::stringstream s1(s);
     while( getline(s1, w1, ';') )
     {
-        std::cout << w1 << "\n";
+        std::cout << "w1: " << w1 << std::endl;
+
         std::string stroke;
         std::string translation;
         std::stringstream s2(w1);
         getline(s2, stroke, ':');
         getline(s2, translation, ':');
-
+        if(stroke == "c/u/r/r/e/n/t")
+        {
+            std::cout << "translation: " << translation << std::endl;
+            std::string translation2;
+            getline(s2, translation2, ':');
+            std::cout << "translation2: " << translation2 << std::endl;
+            int size_needed;
+            current_stroke.setWStroke(global::s2ws(translation2, &size_needed));
+            current_stroke.setWText(global::s2ws(translation, &size_needed));
+            std::cout << "current_stroke: " << translation << std::endl;
+            continue;
+        }
         int size_needed;
         std::wstring wstroke = global::s2ws(stroke, &size_needed);
         std::wstring wtranslation = global::s2ws(translation, &size_needed);
         Suggestion s(0, wstroke, wtranslation);
         suggs.push_back(s);
     }
+    std::cout << std::endl;
     return suggs;
 }
 

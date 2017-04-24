@@ -32,6 +32,7 @@ public: /* methods */
     View();
     ~View();
     void showPopup(std::vector<Suggestion>);
+    void showPopup(std::vector<Suggestion>, std::wstring);
     void hidePopup();
     bool getShow();
     void movePopup(int, int, int, int);
@@ -40,6 +41,7 @@ public: /* methods */
     void adjustPopUp(int, int);
     void avoidScreenEdges(POINT*);
     void displaySuggestions(std::vector<Suggestion>);
+    void displaySuggestions(std::vector<Suggestion>, Suggestion);
     int getMaxOffset(std::vector<Suggestion>);
     int getPopupTimeout();
     void setPopupTimeout(int);
@@ -52,7 +54,7 @@ private: /* methods */
     void handleNextLine(HDC);
     POINT getCaretPosition();
     void drawStringOnPopUp(std::wstring, unsigned int, int);
-    void drawStringOnPopUp(Suggestion s);
+    void drawStringOnPopUp(Suggestion s, int);
     void displayBestTenSuggestion(std::vector<Suggestion>);
     void hideTimeout();
 
