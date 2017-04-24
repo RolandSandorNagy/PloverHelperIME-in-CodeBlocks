@@ -98,19 +98,9 @@ void View::createWindow()
                             NULL);
 }
 
-void View::showPopup(std::vector<Suggestion> suggestions)
-{
-    ShowWindow(hwnd, SW_SHOW);
-    show = true;
-
-    clearPopup(MAX_LINES + 1);
-    displayBestTenSuggestion(suggestions);
-}
-
 void View::showPopup(std::vector<Suggestion> suggestions, std::wstring current)
 {
     ShowWindow(hwnd, SW_SHOW);
-    show = true;
 
     int num = current.size() / 2 + 1;
 
@@ -122,46 +112,11 @@ void View::showPopup(std::vector<Suggestion> suggestions, std::wstring current)
 void View::hidePopup()
 {
     ShowWindow(hwnd, SW_HIDE);
-    show = false;
-}
-
-bool View::getShow()
-{
-    return show;
 }
 
 void View::movePopup(int x, int y, int width, int height)
 {
 	MoveWindow(hwnd, x, y, width, height, true);
-}
-
-void View::drawStringOnPopUp(std::wstring ws, unsigned int length, int mult)
-{
-	PAINTSTRUCT ps;
-	RECT rect;
-
-	HDC hDC = GetDC(hwnd);
-
-	SetBkColor(hDC, bgColor);
-	SetTextColor(hDC, fontColor);
-
-    rect.left   = MARGIN;
-    rect.top    = ln * LINE_HEIGHT;
-    rect.right  = MARGIN + popupWidth;
-    rect.bottom = (ln + 1) * LINE_HEIGHT;
-	DrawText(hDC, ws.c_str(), ws.length(), &rect, 0);
-
-    int size_needed;
-    std::ostringstream ss;
-    ss << mult;
-    std::string s = ss.str();
-    std::wstring wsmult = global::s2ws(s, &size_needed);
-
-    rect.left   = popupWidth - MULT_WIDTH;
-    DrawText(hDC, wsmult.c_str(), wsmult.length(), &rect, 0);
-
-	EndPaint(hwnd, &ps);
-	handleNextLine(hDC);
 }
 
 void View::drawStringOnPopUp(Suggestion s, int num)
@@ -178,12 +133,7 @@ void View::drawStringOnPopUp(Suggestion s, int num)
     rect.top    = ln * LINE_HEIGHT;
     rect.right  = MARGIN + popupWidth;
     rect.bottom = (ln + 1) * LINE_HEIGHT;
-    //if(num > 0)
-    //{
-        //std::wstring pre = getPre
-
-    //} else
-        DrawText(hDC, s.getWStroke().c_str(), s.getWStroke().length(), &rect, 0);
+    DrawText(hDC, s.getWStroke().c_str(), s.getWStroke().length(), &rect, 0);
 
     rect.left   = popupWidth - MULT_WIDTH;
     DrawText(hDC, s.getWText().c_str(), s.getWText().length(), &rect, 0);
@@ -218,6 +168,17 @@ void View::clearPopup(int l)
 void View::closeView()
 {
     SendMessage(hwnd, WM_DESTROY, 0, 0);
+}
+
+void View::displaySuggestions(std::vector<Suggestion> suggestions, Suggestion current)
+{
+    //if(suggestions.size() == 0)
+        //return;
+    suggestions.push_back(current);
+
+    adjustPopUp(suggestions.size(), getMaxOffset(suggestions));
+    showPopup(suggestions, current.getWStroke());
+    hideTimeout();
 }
 
 void View::adjustPopUp(int enrties, int maxOffset)
@@ -291,27 +252,6 @@ POINT View::getCaretPosition()
 	return *point;
 }
 
-void View::displaySuggestions(std::vector<Suggestion> suggestions)
-{
-    //if(suggestions.size() == 0)
-        //return;
-
-    adjustPopUp(suggestions.size(), getMaxOffset(suggestions));
-    showPopup(suggestions);
-    hideTimeout();
-}
-
-void View::displaySuggestions(std::vector<Suggestion> suggestions, Suggestion current)
-{
-    //if(suggestions.size() == 0)
-        //return;
-    suggestions.push_back(current);
-
-    adjustPopUp(suggestions.size(), getMaxOffset(suggestions));
-    showPopup(suggestions, current.getWStroke());
-    hideTimeout();
-}
-
 int View::getMaxOffset(std::vector<Suggestion> suggestions)
 {
     int max = 0;
@@ -327,14 +267,6 @@ void View::hideTimeout()
     maxThreadId++;
     pthread_create(&toThread, NULL, ViewNS::toThreadMethod, (void*)maxThreadId);
     timeoutThread = &toThread;
-}
-
-void View::displayBestTenSuggestion(std::vector<Suggestion> suggestions)
-{
-    for(int i = suggestions.size() - 1; i >= 0 /*&& suggestions.size() - i < MAX_SUGGS*/; --i)
-        //drawStringOnPopUp(suggestions[i]);
-        drawStringOnPopUp(suggestions[i], i);
-        //drawStringOnPopUp(suggestions[i].getWText(), suggestions[i].getWText().size(), suggestions[i].getMultiplicity());
 }
 
 int View::getPopupTimeout()

@@ -6,7 +6,6 @@
 
 class View;
 class Server;
-//class Suggestion;
 
 
 class Controller
@@ -34,22 +33,20 @@ public:  /* methods */
 
 
 private: /* methods */
+    bool commandReceived(char*);
+    void messageReceived(char*, int , unsigned int);
+    std::vector<Suggestion> createSuggestionVector(std::string s);
+    std::vector<Suggestion> buildSuggestions(std::string);
+    void storeCurrentStroke(std::stringstream*, std::string);
+    void addSuggestionToSuggs(std::vector<Suggestion>*, std::string, std::string);
     POINT getCaretPosition();
+    void processCommand(std::string);
     void proceedPause();
     void proceedResume();
     void proceedStop();
     void proceedShow();
     void proceedHide();
-    void proceedUndo();
     void proceedSave();
-    bool commandReceived(char*);
-    void messageReceived(char*, int , unsigned int);
-    std::vector<Suggestion> createSuggestionVector(std::string s);
-    void processCommand(std::string);
-    void collectSuggestions(std::wstring);
-    bool suggestionsHasMember(std::wstring);
-    void handleSuggestions();
-    void sortSuggestions();
 
 };
 

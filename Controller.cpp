@@ -1,11 +1,14 @@
 #include "Controller.h"
-//#include "Suggestion.h"
 #include "Server.h"
 #include "View.h"
 
 
 #define CMD_PREFIX "CMD::"
 #define SAVE_FILE_NAME "lastinput.txt"
+#define NO_SUGGESTION "none"
+#define SUGG_DELIMETER_CHAR ';'
+#define STROKE_DELIMETER_CHAR ':'
+#define CURRENT_STROKE "c/u/r/r/e/n/t"
 
 
 namespace global
@@ -59,78 +62,57 @@ bool Controller::commandReceived(char* recvbuf)
 void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iResult)
 {
     int size_needed;
-    std::string s(recvbuf);
-
-    //std::wstring ws = global::s2ws(s, &size_needed);
-
-    //inputHistory.push_back(ws);
-
-    //collectSuggestions(ws);
-    //sortSuggestions();
-
-    suggestions = createSuggestionVector(s);
-
+    std::string sv_str(recvbuf);
+    suggestions = createSuggestionVector(sv_str);
     view->displaySuggestions(suggestions, current_stroke);
-    //view->displaySuggestions(suggestions);
 }
 
-std::vector<Suggestion> Controller::createSuggestionVector(std::string s)
+std::vector<Suggestion> Controller::createSuggestionVector(std::string sv_str)
 {
     std::vector<Suggestion> suggs;
     suggs.clear();
-    // TODO
-    if(s == "none"){
-        std::cout << "msg: none" << std::endl;
+    if(sv_str == NO_SUGGESTION)
         return suggs;
-    }
-    std::string w1;
-    std::stringstream s1(s);
-    while( getline(s1, w1, ';') )
-    {
-        std::cout << "w1: " << w1 << std::endl;
+    return buildSuggestions(sv_str);
+}
 
+std::vector<Suggestion> Controller::buildSuggestions(std::string sv_str)
+{
+    std::vector<Suggestion> suggs;
+    std::string s;
+    std::stringstream s1(sv_str);
+    while( getline(s1, s, SUGG_DELIMETER_CHAR) )
+    {
+        std::stringstream sparts(s);
         std::string stroke;
         std::string translation;
-        std::stringstream s2(w1);
-        getline(s2, stroke, ':');
-        getline(s2, translation, ':');
-        if(stroke == "c/u/r/r/e/n/t")
-        {
-            std::cout << "translation: " << translation << std::endl;
-            std::string translation2;
-            getline(s2, translation2, ':');
-            std::cout << "translation2: " << translation2 << std::endl;
-            int size_needed;
-            current_stroke.setWStroke(global::s2ws(translation2, &size_needed));
-            current_stroke.setWText(global::s2ws(translation, &size_needed));
-            std::cout << "current_stroke: " << translation << std::endl;
-            continue;
-        }
-        int size_needed;
-        std::wstring wstroke = global::s2ws(stroke, &size_needed);
-        std::wstring wtranslation = global::s2ws(translation, &size_needed);
-        Suggestion s(0, wstroke, wtranslation);
-        suggs.push_back(s);
+        getline(sparts, stroke, STROKE_DELIMETER_CHAR);
+        getline(sparts, translation, STROKE_DELIMETER_CHAR);
+        if(stroke == CURRENT_STROKE)
+            storeCurrentStroke(&sparts, translation);
+        else
+            addSuggestionToSuggs(&suggs, stroke, translation);
     }
-    std::cout << std::endl;
     return suggs;
 }
 
-/*
-void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iResult)
+void Controller::storeCurrentStroke(std::stringstream *sparts, std::string translation)
+{
+    std::string translation2;
+    getline(*sparts, translation2, STROKE_DELIMETER_CHAR);
+    int size_needed;
+    current_stroke.setWStroke(global::s2ws(translation2, &size_needed));
+    current_stroke.setWText(global::s2ws(translation, &size_needed));
+}
+
+void Controller::addSuggestionToSuggs(std::vector<Suggestion> *suggs, std::string stroke, std::string translation)
 {
     int size_needed;
-    std::string s(recvbuf);
-    std::wstring ws = global::s2ws(s, &size_needed);
-
-    inputHistory.push_back(ws);
-
-    collectSuggestions(ws);
-    sortSuggestions();
-
-    view->displaySuggestions(suggestions);
+    std::wstring wstroke = global::s2ws(stroke, &size_needed);
+    std::wstring wtranslation = global::s2ws(translation, &size_needed);
+    Suggestion s(0, wstroke, wtranslation);
+    suggs->push_back(s);
 }
-*/
 
 void Controller::processCommand(std::string str)
 {
@@ -146,8 +128,6 @@ void Controller::processCommand(std::string str)
         proceedShow();
     else if(str == "HIDE")
         proceedHide();
-    else if(str == "UNDO")
-        proceedUndo();
     else if(str == "SAVE")
         proceedSave();
 }
@@ -171,7 +151,7 @@ void Controller::proceedStop()
 
 void Controller::proceedShow()
 {
-    view->showPopup(suggestions);
+    view->displaySuggestions(suggestions, current_stroke);
 }
 
 void Controller::proceedHide()
@@ -179,79 +159,10 @@ void Controller::proceedHide()
     view->hidePopup();
 }
 
-void Controller::proceedUndo()
-{
-    if(inputHistory.size() == 1)
-    {
-        inputHistory.pop_back();
-        return;
-    }
-    else if(inputHistory.size() == 0)
-        return;
-    handleSuggestions();
-    inputHistory.pop_back();
-    collectSuggestions(inputHistory[inputHistory.size() - 1]);
-    sortSuggestions();
-    view->displaySuggestions(suggestions);
-}
-
-void Controller::handleSuggestions()
-{
-    std::wstring ws = inputHistory[inputHistory.size() - 1];
-    for(int i = 0; i < (int)suggestions.size(); ++i)
-    {
-        if(suggestions[i].getWText() == ws)
-        {
-            int mult = suggestions[i].getMultiplicity();
-            mult--;
-            suggestions[i].setMultiplicity(mult);
-            return;
-        }
-    }
-}
 
 void Controller::proceedSave()
 {
-    if(inputHistory.size() == 0)
-        return;
-    file.open(SAVE_FILE_NAME);
-    file << inputHistory[inputHistory.size() - 1].c_str() << std::endl;
-    file.close();
-}
-
-void Controller::collectSuggestions(std::wstring ws)
-{
-    suggestions.clear();
-    for(int i = 0; i < (int)inputHistory.size() - 1; ++i)
-    {
-        if(inputHistory[i] == ws)
-        {
-            if(suggestionsHasMember(inputHistory[i + 1]))
-                continue;
-            Suggestion s(1, inputHistory[i + 1]);
-            suggestions.push_back(s);
-        }
-    }
-}
-
-bool Controller::suggestionsHasMember(std::wstring ws)
-{
-    for(int i = 0; i < (int)suggestions.size(); ++i)
-    {
-        if(suggestions[i].getWText() == ws)
-        {
-            int mult = suggestions[i].getMultiplicity();
-            mult++;
-            suggestions[i].setMultiplicity(mult);
-            return true;
-        }
-    }
-    return false;
-}
-
-void Controller::sortSuggestions()
-{
-    std::sort(suggestions.begin(), suggestions.end(), suggestion_compare_operator());
+    // TODO
 }
 
 

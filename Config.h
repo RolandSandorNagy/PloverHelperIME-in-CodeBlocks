@@ -15,7 +15,7 @@ private: /* members */
     int suggest_by;
     std::string host;
     std::string port;
-    char szPath[MAX_PATH];
+    char folderPath[MAX_PATH];
     std::string full_path;
 
 public: /* methods */
@@ -27,6 +27,8 @@ public: /* methods */
     std::string getFullPath();
 
 private: /* methods */
+    void handleProgramPath();
+    void readDataFromConfigFile(std::ifstream*);
 
 };
 

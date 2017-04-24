@@ -14,32 +14,40 @@
 
 Config::Config()
 {
+    std::ifstream config_file;
+    handleProgramPath();
+    config_file.open((full_path + CONFIG_FILE_NAME).c_str());
+    file_not_found = true;
+    if(!config_file.is_open())
+        return;
+    file_not_found = false;
+    readDataFromConfigFile(&config_file);
+    config_file.close();
+}
+
+void Config::handleProgramPath()
+{
     full_path = DEFAULT_START_PATH;
-    SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, szPath);
-    std::string path(szPath);
-    if(strlen(szPath) == 0)
+    SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, folderPath);
+    std::string path(folderPath);
+    if(strlen(folderPath) == 0)
         full_path += CONFIG_FILE_LOCATION;
     else
         full_path = path + CONFIG_FILE_LOCATION;
-    std::ifstream config_file;
-    config_file.open((full_path + CONFIG_FILE_NAME).c_str());
-    file_not_found = true;
+}
 
-    if(!config_file.is_open())
-        return;
-
-    file_not_found = false;
+void Config::readDataFromConfigFile(std::ifstream *config_file)
+{
     bool start = false;
     bool end = false;
     std::string line;
 
-    while(getline(config_file, line))
+    while(getline(*config_file, line))
     {
         if(line == IME_CONFIG_SECTION)
             start = true;
         if(start && !end && line != IME_CONFIG_SECTION && line[0] == SECTION_START_CHAR)
             end = true;
-
         if(start)
         {
             if(line.find(POPUP_TIMEOUT) != std::string::npos)
@@ -52,7 +60,6 @@ Config::Config()
                 port = line.substr(strlen(PORT), line.length());
         }
     }
-    config_file.close();
 }
 
 Config::~Config()

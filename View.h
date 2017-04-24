@@ -15,15 +15,15 @@ public: /* members */
 
 private: /* members */
     HINSTANCE *hInstance;
-    HWND hwnd;
     WNDCLASSEX wincl;
-    bool show;
-    int ln;
+    HWND hwnd;
+    int popupTimeout;
     int popupWidth;
     int popupHeight;
-    COLORREF bgColor;
+    int ln;
+    COLORREF greenColor;
     COLORREF fontColor;
-    int popupTimeout;
+    COLORREF bgColor;
     pthread_t *timeoutThread = NULL;
 
 
@@ -31,18 +31,10 @@ public: /* methods */
     View(HINSTANCE*);
     View();
     ~View();
-    void showPopup(std::vector<Suggestion>);
     void showPopup(std::vector<Suggestion>, std::wstring);
     void hidePopup();
-    bool getShow();
-    void movePopup(int, int, int, int);
-    void clearPopup(int);
     void closeView();
-    void adjustPopUp(int, int);
-    void avoidScreenEdges(POINT*);
-    void displaySuggestions(std::vector<Suggestion>);
     void displaySuggestions(std::vector<Suggestion>, Suggestion);
-    int getMaxOffset(std::vector<Suggestion>);
     int getPopupTimeout();
     void setPopupTimeout(int);
 
@@ -51,13 +43,16 @@ private: /* methods */
     void initWincl(HINSTANCE*);
     bool register_Class();
     void createWindow();
-    void handleNextLine(HDC);
-    POINT getCaretPosition();
-    void drawStringOnPopUp(std::wstring, unsigned int, int);
+    void movePopup(int, int, int, int);
     void drawStringOnPopUp(Suggestion s, int);
-    void displayBestTenSuggestion(std::vector<Suggestion>);
+    void handleNextLine(HDC);
+    void clearPopup(int);
+    void adjustPopUp(int, int);
+    void avoidScreenEdges(POINT*);
+    POINT getCaretPosition();
+    int getMaxOffset(std::vector<Suggestion>);
     void hideTimeout();
-
+    std::wstring getSubWString(std::wstring, int, int);
 
 };
 
