@@ -171,9 +171,9 @@ void Controller::proceedHide()
 
 void Controller::proceedSave()
 {
-    // TODO: encoding is not right
+    // TODO: encoding is not right for some languages
     std::cout << "saving..." << std::endl;
-    std::wofstream f(SAVE_FILE_NAME, std::fstream::in | std::fstream::out | std::fstream::app);
+    std::wofstream f(SAVE_FILE_NAME, std::wfstream::in | std::wfstream::out | std::wfstream::app);
     f << current_stroke.getWStroke();
     f << L", ";
     f << current_stroke.getWText();

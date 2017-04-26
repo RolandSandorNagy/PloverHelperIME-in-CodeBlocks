@@ -7,7 +7,7 @@
 #define DEFAULT_POPUP_WIDTH 300
 #define PLOVER_GRAY 240
 #define MARGIN 5
-#define LINE_HEIGHT 25
+#define LINE_HEIGHT 15
 #define MULT_WIDTH 75
 #define SUG_WIDTH 10
 #define MAX_LINES 20
@@ -216,9 +216,11 @@ void View::displaySuggestions(std::vector<Suggestion> suggestions, Suggestion cu
 
 void View::adjustPopUp(int entries, int maxTextLength, int maxStrokeLength)
 {
-    Sleep(200);
+    Sleep(100);
 
 	POINT p = getCaretPosition();
+	if(p.x == 0 && p.y == 0)
+        std::cout << "carret position is (0,0)." << std::endl;
     /*
 	if(p.y < 35)
 	{
@@ -250,7 +252,7 @@ void View::avoidScreenEdges(POINT* p)
     int w = popupWidth;                         // get popup width
     int h = popupHeight;                        // get popup height
     int wb = W - w;                             // width border
-    int hb = H - h;                             // height border
+    int hb = H - h + LINE_HEIGHT;               // height border
 
     if(p->x < 0 || p->x > W || p->y < 0 || p->y > actualDesktop.bottom)
         return;
@@ -261,11 +263,11 @@ void View::avoidScreenEdges(POINT* p)
         p->x  = wb;
         p->y += LINE_HEIGHT;
     } else if(p->x <= wb && p->y > hb) // Bottom side of screen
-        p->y = hb;
+        p->y = hb - (H - p->y) - LINE_HEIGHT;
     else if(p->x > wb && p->y > hb)  // Bottom right corner of screen
     {
         p->x = wb;
-        p->y = hb - (H - p->y);
+        p->y = hb - (H - p->y) - LINE_HEIGHT;
     }
 }
 
