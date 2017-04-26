@@ -30,7 +30,7 @@
 	<TCHAR.h>
 	<Shlobj.h>
 
-1493081071 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
+1493183059 c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.h
 	"defines.h"
 	"includes.h"
 	"Suggestion.h"
@@ -51,7 +51,7 @@
 	"includes.h"
 	"Config.h"
 
-1493177722 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
+1493183226 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\view.cpp
 	"View.h"
 
 1493076114 source:c:\users\rol\documents\codeblocks\projects\szakdoga_gyak_4\server.cpp

@@ -7,7 +7,7 @@
 #define DEFAULT_POPUP_WIDTH 300
 #define PLOVER_GRAY 240
 #define MARGIN 5
-#define LINE_HEIGHT 20
+#define LINE_HEIGHT 25
 #define MULT_WIDTH 75
 #define SUG_WIDTH 10
 #define MAX_LINES 20
@@ -216,14 +216,16 @@ void View::displaySuggestions(std::vector<Suggestion> suggestions, Suggestion cu
 
 void View::adjustPopUp(int entries, int maxTextLength, int maxStrokeLength)
 {
-    Sleep(10);
+    Sleep(200);
+
 	POINT p = getCaretPosition();
-	avoidScreenEdges(&p);
+    /*
 	if(p.y < 35)
 	{
 		hidePopup();
 		return;
 	}
+    */
 	popupW1 = maxTextLength * CHAR_WIDTH + 2 * MARGIN;
 	popupW2 = GAP;
 	popupW3 = maxStrokeLength * CHAR_WIDTH + 2 * MARGIN;
@@ -231,7 +233,10 @@ void View::adjustPopUp(int entries, int maxTextLength, int maxStrokeLength)
 	popupH2 = entries * LINE_HEIGHT;
 	popupWidth = popupW1 + popupW2 + popupW3;
 	popupHeight = popupH1 + popupH2;
+
+	avoidScreenEdges(&p);
 	movePopup(p.x, p.y, popupWidth, popupHeight);
+
 	return;
 }
 
@@ -252,14 +257,15 @@ void View::avoidScreenEdges(POINT* p)
 
     if(p->x <= wb && p->y <= hb)
         return;
-    else if(p->x > wb && p->y <= hb) // Right side of screen
-        p->x = wb;
-    else if(p->x <= wb && p->y > hb) // Bottom side of screen
+    else if(p->x > wb && p->y <= hb) {// Right side of screen
+        p->x  = wb;
+        p->y += LINE_HEIGHT;
+    } else if(p->x <= wb && p->y > hb) // Bottom side of screen
         p->y = hb;
     else if(p->x > wb && p->y > hb)  // Bottom right corner of screen
     {
         p->x = wb;
-        p->y = hb - LINE_HEIGHT - h;
+        p->y = hb - (H - p->y);
     }
 }
 
