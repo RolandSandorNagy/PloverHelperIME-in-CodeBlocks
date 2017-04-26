@@ -63,8 +63,14 @@ bool Controller::commandReceived(char* recvbuf)
 void Controller::messageReceived(char* recvbuf, int recvbuflen, unsigned int iResult)
 {
     std::string sv_str(recvbuf);
+    suggestions.clear();
     suggestions = createSuggestionVector(sv_str);
-    view->displaySuggestions(suggestions, current_stroke);
+
+    if(suggestions.size() != 0)
+        view->displaySuggestions(suggestions, current_stroke);
+    else
+        view->hidePopup();
+
 }
 
 std::vector<Suggestion> Controller::createSuggestionVector(std::string sv_str)
@@ -78,7 +84,6 @@ std::vector<Suggestion> Controller::createSuggestionVector(std::string sv_str)
 
 std::vector<Suggestion> Controller::buildSuggestions(std::string sv_str)
 {
-    std::cout << "itt vagyok." << std::endl;
     std::vector<Suggestion> suggs;
     std::string s;
     std::stringstream s1(sv_str);
@@ -89,8 +94,6 @@ std::vector<Suggestion> Controller::buildSuggestions(std::string sv_str)
         std::string stroke;
         getline(sparts, stroke, STROKE_DELIMETER_CHAR);
         getline(sparts, translation, STROKE_DELIMETER_CHAR);
-        std::cout << stroke << std::endl;
-        std::cout << translation << std::endl;
         if(stroke == CURRENT_STROKE)
             storeCurrentStroke(&sparts, translation);
         else
@@ -101,17 +104,18 @@ std::vector<Suggestion> Controller::buildSuggestions(std::string sv_str)
 
 void Controller::storeCurrentStroke(std::stringstream *sparts, std::string translation)
 {
-    std::cout << "megint itt vagyok." << std::endl;
     std::string translation2;
     getline(*sparts, translation2, STROKE_DELIMETER_CHAR);
     int size_needed;
-    current_stroke.setWStroke(global::s2ws(translation2, &size_needed));
+    if(translation2 == "none")
+        current_stroke.setWStroke(global::s2ws(translation, &size_needed));
+    else
+        current_stroke.setWStroke(global::s2ws(translation2, &size_needed));
     current_stroke.setWText(global::s2ws(translation, &size_needed));
 }
 
 void Controller::addSuggestionToSuggs(std::vector<Suggestion> *suggs, std::string stroke, std::string translation)
 {
-    std::cout << "megint itt vagyok. 2" << std::endl;
     int size_needed;
     std::wstring wstroke = global::s2ws(stroke, &size_needed);
     std::wstring wtranslation = global::s2ws(translation, &size_needed);
@@ -156,7 +160,7 @@ void Controller::proceedStop()
 
 void Controller::proceedShow()
 {
-    view->displaySuggestions(suggestions, current_stroke);
+        view->displaySuggestions(suggestions, current_stroke);
 }
 
 void Controller::proceedHide()
